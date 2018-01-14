@@ -5,7 +5,7 @@ url = process.env.URL_DB,
 
 var postInfoUser = async(senderId) => {
     var res = await (getFbInfo.getFbInfo(senderId));
-    MongoClient.connect(url, (err, db) => {
+    mongodb.connect(url, (err, db) => {
         if (err) throw err;
         let collect = db.db('cspheartsync').collection('users');
         collect.count({

@@ -15,8 +15,7 @@ class asyncBot {
                 let incovers = await (checkincovers.checkincovers(senderId));
                 if (incovers == null) { sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại") }
                 if (incovers === 0) {
-                    sendMessage.sendTextMessage(senderId, "Đang tìm cặp cho bạn <3");
-                    pending.pending(senderId);
+                    sendMessage.sendButtonSelectGender (senderId);
                 }
                 if (incovers === 1) {
                     sendMessage.sendTextMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3");
@@ -60,7 +59,18 @@ class asyncBot {
     select(senderId, gender) {
         (async () => {
             let res = await (chooseFavorite.chooseFavorite(senderId, gender));
-            sendMessage.sendBotMessage(senderId, res, "Cảm ơn bạn");
+            let incovers = await (checkincovers.checkincovers(senderId));
+            if (incovers == null) { sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại") }
+            if (incovers === 0) {
+                sendMessage.sendBotMessage(senderId, "Đang tìm cặp cho bạn <3", res);
+                pending.pending (senderId);
+            }
+            if (incovers === 1) {
+                sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Hãy gõ end và bấm phím bất kỳ để lựa chọn của bạn trở nên có hiệu lực nhé <3");
+            }
+            if (incovers === 2) {
+                sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Lựa chọn sẽ có hiệu lực trong cuộc trò chuyện tiếp theo <3");
+            }
         })()
     }
     procImage(senderId, payload) {
