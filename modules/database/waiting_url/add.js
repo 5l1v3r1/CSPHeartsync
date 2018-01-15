@@ -7,9 +7,9 @@ var add_awaiting_input = (senderId) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
             db.db('cspheartsync').collection('input_pending').insertOne({
-                _id = senderId.toString(),
-                type = 'url',
-                fburl = ''
+                _id : senderId.toString(),
+                type : 'url',
+                fburl : ''
             })
         })
     })

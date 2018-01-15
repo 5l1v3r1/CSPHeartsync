@@ -2,7 +2,8 @@ require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
 url = process.env.URL_DB,
     endC = require('../resUser/endChat'),
-    sendMessage = require('../../api/facebookAPI/sendMessage');
+    sendMessage = require('../../api/facebookAPI/sendMessage'),
+    send_anonymous_message = require ('../send_anonymous_message');
 
 var endChat = (senderId) => {
     mongodb.connect(url, (err, db) => {
@@ -20,6 +21,8 @@ var endChat = (senderId) => {
                             endC.endC(partnerId).then(e => {
                                 sendMessage.sendBotMessageWithPromise(senderId, "Bạn đã kết thúc cuộc trò chuyện", "Bấm phím bất kỳ để tiếp tục tìm bạn nha").then(f => {
                                     sendMessage.sendBotMessageWithPromise(partnerId, "Cuộc trò chuyện đã kết thúc", "Bấm phím bất kỳ để tiếp tục tìm bạn nha");
+                                    send_anonymous_message.fetch_message (senderId);
+                                    send_anonymous_message.fetch_message (partnerId);
                                 })
                             })
                         })
@@ -31,6 +34,7 @@ var endChat = (senderId) => {
                     db.db('cspheartsync').collection('pending').deleteOne({ _id: senderId.toString() }, (err, res) => {
                         if (err) throw err
                         sendMessage.sendTextMessage(senderId, "Bạn đã hủy yêu cầu tìm bạn. Nhắn bất kỳ thứ gì để tìm bạn lại nhé")
+                        send_anonymous_message.fetch_message (senderId);
                     })
                 })
             }

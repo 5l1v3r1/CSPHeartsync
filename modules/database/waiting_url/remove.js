@@ -8,8 +8,8 @@ var remove_awaiting_input = (senderId) => {
             if (err) throw err;
             db.db ('cspheartsync').collection('input_pending').deleteMany (
                 {
-                    _id = senderId.toString (),
-                    type = 'url'
+                    _id : senderId.toString (),
+                    type : 'url'
                 }
             )
         })
