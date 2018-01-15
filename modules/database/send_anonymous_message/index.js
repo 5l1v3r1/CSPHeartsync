@@ -31,9 +31,18 @@ var send_message = (message, fburl) => {
                     if (res == null) {
                         resolve('not_found');
                     } else {
-                        sendMessage.sendBotMessage(res[0]._id, "Bạn có một tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ");
-                        sendMessage.sendTextMessage(res[0]._id, message);
-                        resolve('ok');
+                        let receiverId = res[0]._id;
+                        let inconvers = checkinconvers.checkincovers (receiverId)
+                        if (inconvers === 0) 
+                        {
+                            sendMessage.sendBotMessage(receiverId, "Bạn có một tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ");
+                            sendMessage.sendTextMessage(receiverID, message);
+                            resolve('ok');
+                        }
+                        else
+                        {
+                            waiting_message.
+                        }                        
                     }
                 })
             })
