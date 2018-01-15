@@ -18,8 +18,8 @@ var getFbInfo = (senderId) => {
                 _id: body.id + "",
                 favorite: "none",
                 inconversation: 0, //0 no, 1 pending, 2 yep
-                pic_id: body.profile_pic.split('_')[1].toString()
-
+                pic_id: body.profile_pic.split('_')[1].toString(),
+                accept_mess: true
             };
             resolve(obj);
         })
