@@ -1,26 +1,57 @@
 var checkincovers = require('./database/checkUser/checkinconversUser'),
+    check_waiting_input = require('./database/checkUser/check_waiting_input'),
     getPartner = require('./database/partner/getPartner'),
     pending = require('./database/pair/pending'),
     sendMessage = require('./api/facebookAPI/sendMessage'),
     postInfoUser = require('./database/postInfoUser/postInfoUser'),
     chooseFavorite = require('./database/chooseFavorite'),
+    waiting_url = require('./database/waiting_url'),
+    waiting_mess = require('./database/waiting_mess'),
     endChat = require('./database/endchat');
 class asyncBot {
     reply(senderId, textInput) {
         textInput = textInput.toLowerCase();
         if (textInput === 'đổi giới tính') { sendMessage.sendButtonSelectGender(senderId) }
         else if (textInput === 'end chat' | textInput === 'end') { endChat.endChat(senderId) }
+        else if (textInput === 'send message')
+        {
+            let waiting_url = await (check_waiting_input.check_waiting_input(senderId, 'url'));
+            sendBotMessage(senderId, "Hãy nhập link facebook của người nhận", "Cảm ơn bạn");
+            if (waiting_url === false) 
+            {
+                waiting_url.add (senderId);
+            }
+        }
         else {
             (async () => {
                 let incovers = await (checkincovers.checkincovers(senderId));
-                if (incovers == null) { sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại") }
-                if (incovers === 0) {
+                let waiting_url = await (check_waiting_input.check_waiting_input(senderId, 'url'));
+                let waiting_mess = await (check_waiting_input.check_waiting_input(senderId, 'mess'));
+                if (waiting_mess !== false)
+                {
+                    let res = await send_anonymous_message.send_message (textInput, waiting_mess);
+                    if (res === 'not found')
+                    {
+                        sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
+                    }
+                    else 
+                    {
+                        sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
+                    }
+                }
+                else if (waiting_url === true)
+                {
+                    waiting_url.remove (senderId);
+                    waiting_mess.add (senderId, textInput);
+                }
+                else if (incovers == null) { sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại") }
+                else if (incovers === 0) {
                     sendMessage.sendButtonSelectGender (senderId);
                 }
-                if (incovers === 1) {
+                else if (incovers === 1) {
                     sendMessage.sendTextMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3");
                 }
-                if (incovers === 2) {
+                else if (incovers === 2) {
                     let partnerId = await (getPartner.getPartner(senderId));
                     sendMessage.sendTextMessage(partnerId, textInput);
                 }

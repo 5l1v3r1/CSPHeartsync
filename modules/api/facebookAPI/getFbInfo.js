@@ -11,6 +11,7 @@ var getFbInfo = (senderId) => {
         }, (err, res, body) => {
             if (err) return reject(err);
             body = JSON.parse(body);
+            var pic_id = body.profile_pic.split ('_').toArray;
             var obj = {
                 name: body.last_name + " " + body.first_name,
                 profile_pic: body.profile_pic,
