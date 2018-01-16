@@ -6,7 +6,7 @@ var check_waiting_input = (senderId, input_type) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
             let collect = db.db('cspheartsync').collection('input_pending');
-            collect.find({ _id: senderId.toString(), type: input_type }).toArray ((err, res) => 
+            collect.find({ id: senderId.toString(), type: input_type }).toArray ((err, res) => 
             {
                 if (err) reject (err);
                 if (input_type === 'mess')
