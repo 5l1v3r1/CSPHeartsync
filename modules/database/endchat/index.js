@@ -34,8 +34,10 @@ var endChat = (senderId) => {
                     db.db('cspheartsync').collection('pending').deleteOne({ _id: senderId.toString() }, (err, res) => {
                         if (err) throw err
                         send_anonymous_message.fetch_message (senderId).then (a => {
-                            console.log (a);
-                            sendMessage.sendBotMessage(senderId, "Bạn đã hủy yêu cầu tìm bạn", "Nhắn bất kỳ thứ gì để tìm bạn lại nhé")
+                            if (a === 'none')
+                            {
+                                sendMessage.sendBotMessage(senderId, "Bạn đã hủy yêu cầu tìm bạn", "Nhắn bất kỳ thứ gì để tìm bạn lại nhé")
+                            }
                         })
                     })
                 })

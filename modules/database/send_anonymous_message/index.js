@@ -63,12 +63,16 @@ var fetch_message = (receiverId) => {
                             sendMessage.sendTextMessage(receiverId, element.message);
                         });
                     });
+                    resolve ('sent');
+                }
+                else 
+                {
+                    resolve ('none');
                 }
                 collect.deleteMany({
                     receiverId: receiverId
                 })
             })
-            resolve ('ok');
         })
     })
 }
