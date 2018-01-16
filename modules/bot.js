@@ -12,7 +12,6 @@ class asyncBot {
     reply(senderId, textInput) {
         textInput = textInput.toLowerCase();
         if (textInput === 'đổi giới tính') { sendMessage.sendButtonSelectGender(senderId) }
-        else if (textInput === 'end chat' | textInput === 'end') { endChat.endChat(senderId) }
         else if (textInput === 'send message')
         {
             let waiting_url = await (check_waiting_input.check_waiting_input(senderId, 'url'));

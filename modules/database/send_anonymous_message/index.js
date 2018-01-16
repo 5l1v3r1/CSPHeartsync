@@ -2,18 +2,17 @@ require('dotenv').config()
 var checkinconvers = require('../checkUser/checkinconversUser'),
     mongodb = require('mongodb').MongoClient(),
     request = require('request'),
-    url = process.env.URL_DB;
-sendMessage = require('../../api/facebookAPI/sendMessage');
+    url = process.env.URL_DB,
+    sendMessage = require('../../api/facebookAPI/sendMessage');
 var find_fb_ava_id = (fburl) => {
     return new Promise((resolve, reject) => {
         request({
-            url: '000webhost.....',
-            method: "get",
-            // chua ro, can hoi them
+            url: 'http://getfbid.000webhostapp.com/getID/index.php?url=' + encodeURI(fburl),
+            method: "get"
         }, (err, res, body) => {
-            if (err) reject(err);
-            if (res.body.error) reject(res.body.error);
-            resolve(res);
+            if (err) throw (err);
+            if (res.body.error) throw (res.body.error);
+            resolve(body);
         })
     })
 }
@@ -25,7 +24,7 @@ var send_message = (message, fburl) => {
                 if (err) throw (err);
                 let collect = db.db('cspheartsync').collection('user');
                 collect.find({
-                    pic_id = img_id
+                    pic_id: img_id
                 }).toArray((err, res) => {
                     if (err) reject(err);
                     if (res == null) {
@@ -57,17 +56,15 @@ var fetch_message = (receiverId) => {
             receiverId: receiverId
         }).toArray((err, res) => {
             if (err) throw err;
-            if (res.length != 0)
-            {
-                sendBotMessagewithPromise(receiverId, "Bạn có" + res.length + "tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then (a =>
-                {
+            if (res.length != 0) {
+                sendBotMessagewithPromise(receiverId, "Bạn có" + res.length + "tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
                     res.forEach(element => {
-                       sendTextMessage (receiverId, element.message);
+                        sendTextMessage(receiverId, element.message);
                     });
                 });
             }
-            collect.deleteMany ({
-                receiverId: receiverId;
+            collect.deleteMany({
+                receiverId: receiverId
             })
         })
     })
