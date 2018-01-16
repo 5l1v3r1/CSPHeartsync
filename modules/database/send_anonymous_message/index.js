@@ -3,7 +3,7 @@ var checkinconvers = require('../checkUser/checkinconversUser'),
     mongodb = require('mongodb').MongoClient,
     request = require('request'),
     url = process.env.URL_DB,
-    sendMessage = require('../../api/facebookAPI/sendMessage').;
+    sendMessage = require('../../api/facebookAPI/sendMessage');
 var find_fb_ava_id = (fburl) => {
     return new Promise((resolve, reject) => {
         request({
