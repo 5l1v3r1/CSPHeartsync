@@ -33,10 +33,12 @@ class asyncBot {
                                 if (res === 'not found') {
                                     sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
                                 } else {
+                                    waiting_mess.remove (senderId);
                                     sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
                                 }
                             })
                         } else if (is_waiting_url === true) {
+                            sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn")
                             waiting_url.remove(senderId);
                             waiting_mess.add(senderId, textInput);
                         } else if (incovers == null) {

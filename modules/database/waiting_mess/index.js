@@ -7,7 +7,7 @@ var add_awaiting_input = (senderId, fburl) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
             db.db('cspheartsync').collection('input_pending').insertOne({
-                _id: senderId.toString(),
+                _id: senderId,
                 type: 'message',
                 fburl: fburl
             })
@@ -21,8 +21,7 @@ var remove_awaiting_input = (senderId) => {
             if (err) throw err;
             db.db('cspheartsync').collection('input_pending').deleteMany(
                 {
-                    _id: senderId.toString(),
-                    type: 'message'
+                    _id: senderId,
                 }
             )
         })
