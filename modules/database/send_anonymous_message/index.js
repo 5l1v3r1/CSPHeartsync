@@ -3,7 +3,7 @@ var checkinconvers = require('../checkUser/checkinconversUser'),
     mongodb = require('mongodb').MongoClient,
     request = require('request'),
     url = process.env.URL_DB,
-    sendMessage = require('../../api/facebookAPI/sendMessage');
+    sendMessage = require('../../api/facebookAPI/sendMessage').;
 var find_fb_ava_id = (fburl) => {
     return new Promise((resolve, reject) => {
         request({
@@ -57,7 +57,7 @@ var fetch_message = (receiverId) => {
         }).toArray((err, res) => {
             if (err) throw err;
             if (res.length != 0) {
-                sendBotMessagewithPromise(receiverId, "Bạn có" + res.length + "tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
+                sendBotMessageWithPromise(receiverId, "Bạn có" + res.length + "tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
                     res.forEach(element => {
                         sendTextMessage(receiverId, element.message);
                     });
