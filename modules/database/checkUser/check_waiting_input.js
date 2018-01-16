@@ -11,12 +11,12 @@ var check_waiting_input = (senderId, input_type) => {
                 if (err) reject (err);
                 if (input_type === 'mess')
                 {
-                    if (res == null) resolve (false);
-                    resolve (res[0].fburl);
+                    if (typeof res == 'undefined' || res == null || res.length == 0) resolve (false);
+                    else resolve (res[0].fburl);
                 }
                 else
                 {
-                    if (res == null) resolve (false);
+                    if (typeof res == 'undefined' || res == null || res.length == 0) resolve (false);
                     else resolve (true);   
                 }
             });

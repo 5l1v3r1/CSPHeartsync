@@ -1,6 +1,6 @@
 require('dotenv').config()
 var checkinconvers = require('../checkUser/checkinconversUser'),
-    mongodb = require('mongodb').MongoClient(),
+    mongodb = require('mongodb').MongoClient,
     request = require('request'),
     url = process.env.URL_DB,
     sendMessage = require('../../api/facebookAPI/sendMessage');
