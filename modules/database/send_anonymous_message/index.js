@@ -57,9 +57,9 @@ var fetch_message = (receiverId) => {
         }).toArray((err, res) => {
             if (err) throw err;
             if (res.length != 0) {
-                sendBotMessageWithPromise(receiverId, "Bạn có" + res.length + "tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
+                sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có" + res.length + "tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
                     res.forEach(element => {
-                        sendTextMessage(receiverId, element.message);
+                        sendMessage.sendTextMessage(receiverId, element.message);
                     });
                 });
             }
