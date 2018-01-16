@@ -49,23 +49,26 @@ var send_message = (message, fburl) => {
     })
 }
 var fetch_message = (receiverId) => {
-    mongodb.connect(url, (err, db) => {
-        if (err) throw err;
-        let collect = db.db('cspheartsync').collection('pending_message')
-        collect.find({
-            receiverId: receiverId
-        }).toArray((err, res) => {
+    return new Promise ((resolve, reject) => {
+        mongodb.connect(url, (err, db) => {
             if (err) throw err;
-            if (res.length != 0) {
-                sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có" + res.length + "tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
-                    res.forEach(element => {
-                        sendMessage.sendTextMessage(receiverId, element.message);
-                    });
-                });
-            }
-            collect.deleteMany({
+            let collect = db.db('cspheartsync').collection('pending_message')
+            collect.find({
                 receiverId: receiverId
+            }).toArray((err, res) => {
+                if (err) throw err;
+                if (res.length != 0) {
+                    sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có" + res.length + "tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
+                        res.forEach(element => {
+                            sendMessage.sendTextMessage(receiverId, element.message);
+                        });
+                    });
+                }
+                collect.deleteMany({
+                    receiverId: receiverId
+                })
             })
+            resolve ('ok');
         })
     })
 }
