@@ -46,7 +46,7 @@ var endChat = (senderId) => {
                         send_anonymous_message.fetch_message(senderId).then(a => {
                             if (a === 'none') {
                                 check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
-                                    check_waiting_input.check_waiting_input(senderId, 'mess').(is_waiting_mess => {
+                                    check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
                                         if (is_waiting_mess !== false)
                                         {
                                             waiting_mess.remove (senderId);
