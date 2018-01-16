@@ -5,7 +5,7 @@ var check_waiting_input = (senderId, input_type) => {
     return new Promise((resolve, reject) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
-            let collect = db.db('cspheartsync').collection('users');
+            let collect = db.db('cspheartsync').collection('input_pending');
             collect.find({ _id: senderId.toString(), type: input_type }).toArray ((err, res) => 
             {
                 if (err) reject (err);
