@@ -17,7 +17,8 @@ class asyncBot {
             sendMessage.sendButtonSelectGender(senderId)
         } else if (textInput === 'send message') {
             check_waiting_input.check_waiting_input(senderId, 'url').then(waiting_url => {
-                sendBotMessage(senderId, "Hãy nhập link facebook của người nhận", "Cảm ơn bạn");
+                console.log (waiting_url);
+                sendMessage.sendBotMessage(senderId, "Hãy nhập link facebook của người nhận", "Cảm ơn bạn");
                 if (waiting_url === false) {
                     waiting_url.add(senderId);
                 }
@@ -30,9 +31,9 @@ class asyncBot {
                 if (waiting_mess !== false) {
                     let res = await send_anonymous_message.send_message(textInput, waiting_mess);
                     if (res === 'not found') {
-                        sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
+                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
                     } else {
-                        sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
+                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
                     }
                 } else if (waiting_url === true) {
                     waiting_url.remove(senderId);
