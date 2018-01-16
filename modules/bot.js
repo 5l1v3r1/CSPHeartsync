@@ -10,24 +10,21 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     endChat = require('./database/endchat');
 class asyncBot {
     reply(senderId, textInput) {
-        textInput = textInput.toLowerCase();
-        if (textInput === 'end') {
+        if (textInput.toLowerCase() === 'end') {
             endChat.endChat(senderId)
-        } else if (textInput === 'đổi giới tính') {
-            sendMessage.sendButtonSelectGender(senderId)
-        } else if (textInput === 'send message') {
+        } else if (textInput.toLowerCase() === 'send message') {
             check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
-                console.log(is_waiting_url);
                 sendMessage.sendBotMessage(senderId, "Hãy nhập link facebook của người nhận", "Cảm ơn bạn");
                 if (is_waiting_url === false) {
                     waiting_url.add(senderId);
                 }
             })
         } else {
-            (async() => {
+            (async () => {
                 checkincovers.checkincovers(senderId).then(incovers => {
                     check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                         check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
+                            console.log (senderId + " " + is_waiting_mess)
                             if (is_waiting_mess !== false) {
                                 send_anonymous_message.send_message(textInput, is_waiting_mess).then(res => {
                                     if (res === 'not found') {
@@ -38,7 +35,7 @@ class asyncBot {
                                     }
                                 })
                             } else if (is_waiting_url === true) {
-                                sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn")
+                                sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
                                 waiting_url.remove(senderId);
                                 waiting_mess.add(senderId, textInput);
                             } else if (incovers == null) {
@@ -48,7 +45,7 @@ class asyncBot {
                             } else if (incovers === 1) {
                                 sendMessage.sendTextMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3");
                             } else if (incovers === 2) {
-                                let partnerId = await (getPartner.getPartner(senderId));
+                                let partnerId = await(getPartner.getPartner(senderId));
                                 sendMessage.sendTextMessage(partnerId, textInput);
                             }
                         })
@@ -92,7 +89,7 @@ class asyncBot {
         }
     }
     select(senderId, gender) {
-        (async() => {
+        (async () => {
             let res = await (chooseFavorite.chooseFavorite(senderId, gender));
             let incovers = await (checkincovers.checkincovers(senderId));
             if (incovers == null) {
@@ -111,7 +108,7 @@ class asyncBot {
         })()
     }
     procImage(senderId, payload) {
-        (async() => {
+        (async () => {
             let incovers = await (checkincovers.checkincovers(senderId));
             if (incovers == null) {
                 sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
@@ -129,7 +126,7 @@ class asyncBot {
         })()
     }
     procVideo(senderId, payload) {
-        (async() => {
+        (async () => {
             let incovers = await (checkincovers.checkincovers(senderId));
             if (incovers == null) {
                 sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
@@ -147,7 +144,7 @@ class asyncBot {
         })()
     }
     procAudio(senderId, payload) {
-        (async() => {
+        (async () => {
             let incovers = await (checkincovers.checkincovers(senderId));
             if (incovers == null) {
                 sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
