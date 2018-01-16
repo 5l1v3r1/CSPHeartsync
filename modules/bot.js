@@ -16,39 +16,42 @@ class asyncBot {
         } else if (textInput === 'đổi giới tính') {
             sendMessage.sendButtonSelectGender(senderId)
         } else if (textInput === 'send message') {
-            check_waiting_input.check_waiting_input(senderId, 'url').then(waiting_url => {
-                console.log (waiting_url);
+            check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
+                console.log(is_waiting_url);
                 sendMessage.sendBotMessage(senderId, "Hãy nhập link facebook của người nhận", "Cảm ơn bạn");
-                if (waiting_url === false) {
+                if (is_waiting_url === false) {
                     waiting_url.add(senderId);
                 }
             })
         } else {
             (async() => {
                 let incovers = await (checkincovers.checkincovers(senderId));
-                let waiting_url = await (check_waiting_input.check_waiting_input(senderId, 'url'));
-                let waiting_mess = await (check_waiting_input.check_waiting_input(senderId, 'mess'));
-                if (waiting_mess !== false) {
-                    let res = await send_anonymous_message.send_message(textInput, waiting_mess);
-                    if (res === 'not found') {
-                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
-                    } else {
-                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
-                    }
-                } else if (waiting_url === true) {
-                    waiting_url.remove(senderId);
-                    waiting_mess.add(senderId, textInput);
-                } else if (incovers == null) {
-                    sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
-                } else if (incovers === 0) {
-                    sendMessage.sendButtonSelectGender(senderId);
-                } else if (incovers === 1) {
-                    sendMessage.sendTextMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3");
-                } else if (incovers === 2) {
-                    let partnerId = await (getPartner.getPartner(senderId));
-                    sendMessage.sendTextMessage(partnerId, textInput);
-                }
-            })()
+                check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
+                    check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
+                        if (is_waiting_mess !== false) {
+                            send_anonymous_message.send_message(textInput, is_waiting_mess).then(res => {
+                                if (res === 'not found') {
+                                    sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
+                                } else {
+                                    sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
+                                }
+                            })
+                        } else if (is_waiting_url === true) {
+                            waiting_url.remove(senderId);
+                            waiting_mess.add(senderId, textInput);
+                        } else if (incovers == null) {
+                            sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
+                        } else if (incovers === 0) {
+                            sendMessage.sendButtonSelectGender(senderId);
+                        } else if (incovers === 1) {
+                            sendMessage.sendTextMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3");
+                        } else if (incovers === 2) {
+                            let partnerId = await (getPartner.getPartner(senderId));
+                            sendMessage.sendTextMessage(partnerId, textInput);
+                        }
+                    })
+                })
+            })
         }
     }
     get_started(senderId) {
