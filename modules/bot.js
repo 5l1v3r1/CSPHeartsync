@@ -124,7 +124,7 @@ class asyncBot {
                         if (is_waiting_url !== false) {
                             sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
                         } else if (is_waiting_mess !== false) {
-                            send_anonymous_message.send_message(textInput, is_waiting_mess, 'img').then(res => {
+                            send_anonymous_message.send_message(payload, is_waiting_mess, 'img').then(res => {
                                 if (res === 'ok') {
                                     sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
                                 } else if (res === 'not receiving') {
@@ -157,7 +157,7 @@ class asyncBot {
                         if (is_waiting_url !== false) {
                             sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
                         } else if (is_waiting_mess !== false) {
-                            send_anonymous_message.send_message(textInput, is_waiting_mess, 'video').then(res => {
+                            send_anonymous_message.send_message(payload, is_waiting_mess, 'video').then(res => {
                                 if (res === 'ok') {
                                     sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
                                 } else if (res === 'not receiving') {
@@ -190,7 +190,7 @@ class asyncBot {
                         if (is_waiting_url !== false) {
                             sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
                         } else if (is_waiting_mess !== false) {
-                            send_anonymous_message.send_message(textInput, is_waiting_mess, 'audio').then(res => {
+                            send_anonymous_message.send_message(payload, is_waiting_mess, 'audio').then(res => {
                                 if (res === 'ok') {
                                     sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
                                 } else if (res === 'not receiving') {
