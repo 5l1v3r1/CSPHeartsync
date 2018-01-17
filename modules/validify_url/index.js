@@ -13,10 +13,11 @@ var check_url_validity = (url) => {
 var validify = (str) => {
     var spl = str.split ('.');
     var res = "";
-    for (var i = 1; i < spl.length; ++i)
+    for (var i = 1; i + 1 < spl.length; ++i)
     {
         res += spl[i] + ".";
     }
+    res += spl[spl.length - 1];
     return res;
 }
 module.exports = {

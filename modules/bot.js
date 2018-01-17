@@ -44,7 +44,6 @@ class asyncBot {
                                 else 
                                 {
                                     var val = validify_url.validify (textInput);
-                                    console.log (val);
                                     sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
                                     waiting_url.remove(senderId);
                                     waiting_mess.add(senderId, val);
