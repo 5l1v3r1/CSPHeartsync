@@ -17,7 +17,7 @@ var find_fb_ava_id = (fburl) => {
     })
 }
 
-var send_message = (message, fburl) => {
+var send_message = (message, fburl, message_type) => {
     return new Promise((resolve, reject) => {
         find_fb_ava_id(fburl).then(img_id => {
             mongodb.connect(url, (err, dbase) => {
@@ -35,13 +35,29 @@ var send_message = (message, fburl) => {
                             if (inconvers === 0) {
                                 sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có một tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then (result =>
                                 {
-                                    sendMessage.sendTextMessage(receiverId, message);
+                                    if (message_type == 'text')
+                                    {
+                                        sendMessage.sendTextMessage(receiverId, message);
+                                    }
+                                    else if (message_type == 'img')
+                                    {
+                                        sendMessage.sendImage (receiverId, message);
+                                    }
+                                    else if (message_type == 'video')
+                                    {
+                                        sendMessage.sendVideo (receiverId, message);
+                                    }
+                                    else if (message_type == 'audio')
+                                    {
+                                        sendMessage.sendAudio (receiverId, message);
+                                    }
                                     resolve('ok');
                                 })
                             } else {
                                 dbase.db('cspheartsync').collection('pending_message').insertOne({
                                     message: message,
-                                    receiverId: receiverId
+                                    receiverId: receiverId,
+                                    message_type: message_type
                                 }, (err, res) => {
                                     resolve(ok);
                                 })
@@ -65,7 +81,18 @@ var fetch_message = (receiverId) => {
                 if (res.length != 0) {
                     sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có " + res.length + " tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
                         res.forEach(element => {
-                            sendMessage.sendTextMessage(receiverId, element.message);
+                            if (element.message_type == 'text') {
+                                sendMessage.sendTextMessage(receiverId, element.message);
+                            }
+                            else if (element.message_type == 'img') {
+                                sendMessage.sendImage(receiverId, element.message);
+                            }
+                            else if (element.message_type == 'video') {
+                                sendMessage.sendVideo(receiverId, element.message);
+                            }
+                            else if (element.message_type == 'audio') {
+                                sendMessage.sendAudio(receiverId, element.message);
+                            }
                         });
                     });
                     resolve('sent');
