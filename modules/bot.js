@@ -8,10 +8,21 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     waiting_url = require('./database/waiting_url'),
     waiting_mess = require('./database/waiting_mess'),
     send_anonymous_message = require('./database/send_anonymous_message'),
+    receive_anonymous_message = require('./database/receive_anonymous_message'),
     endChat = require('./database/endchat'),
     validify_url = require('./validify_url');
 class asyncBot {
     reply(senderId, textInput) {
+        if (textInput.toLowerCase() === 'stop receiving message')
+        {
+            receive_anonymous_message.stop_receiving (senderId);
+            sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ không nhận được những tin nhắn ẩn danh nữa")
+        }
+        else if (textInput.toLowerCase () === 'start receiving message')
+        {
+            receive_anonymous_message.start_receiving (senderId);
+            sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ tiếp tục nhận được những tin nhắn ẩn danh")
+        }
         if (textInput.toLowerCase() === 'end') {
             endChat.endChat(senderId)
         } else if (textInput.toLowerCase() === 'send message') {
@@ -40,8 +51,7 @@ class asyncBot {
                             } else if (is_waiting_url === true) {
                                 var ok = validify_url.check_url_validity(textInput);
                                 if (ok === false) {
-                                    sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
-                                } else {
+                                    sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận") } else {
                                     var val = validify_url.validify(textInput);
                                     sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
                                     waiting_url.remove(senderId);
