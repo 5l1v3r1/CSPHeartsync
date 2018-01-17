@@ -2,7 +2,7 @@ require('dotenv').config()
 var checkinconvers = require('../checkUser/checkinconversUser'),
     mongodb = require('mongodb').MongoClient,
     request = require('request'),
-    url = process.env.URL_DB,
+    url = 'mongodb://127.0.0.1:27017',
     sendMessage = require('../../api/facebookAPI/sendMessage');
 var find_fb_ava_id = (fburl) => {
     return new Promise((resolve, reject) => {
@@ -18,30 +18,35 @@ var find_fb_ava_id = (fburl) => {
 }
 
 var send_message = (message, fburl) => {
+    //console.log(url)
     return new Promise((resolve, reject) => {
         find_fb_ava_id(fburl).then(img_id => {
-            mongodb.connect(url, (err, db) => {
-                if (err) throw (err);
-                let collect = db.db('cspheartsync').collection('user');
-                collect.find({
+            mongodb.connect(url, (err, dbase) => {
+                if (err) throw err;
+                img_id = parseInt(img_id).toString()
+                console.log(img_id == '105044870298953');
+                dbase.db('cspheartsync').collection('users').find({
                     pic_id: img_id
                 }).toArray((err, res) => {
-                    if (err) reject(err);
-                    if (res == null) {
+                    if (err) throw err;
+                    if (res == null || typeof res == 'undefined' || res.length == 0) {
                         resolve('not_found');
                     } else {
                         let receiverId = res[0]._id;
-                        let inconvers = checkinconvers.checkincovers(receiverId)
-                        if (inconvers === 0) {
-                            sendMessage.sendBotMessage(receiverId, "Bạn có một tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ");
-                            sendMessage.sendTextMessage(receiverId, message);
-                            resolve('ok');
-                        } else {
-                            db.db('cspheartsync').collection('pending_message').insertOne({
-                                message: message,
-                                receiverId: receiverId
-                            })
-                        }
+                        checkinconvers.checkincovers(receiverId).then(inconvers => {
+                            if (inconvers === 0) {
+                                sendMessage.sendBotMessage(receiverId, "Bạn có một tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ");
+                                sendMessage.sendTextMessage(receiverId, message);
+                                resolve('ok');
+                            } else {
+                                dbase.db('cspheartsync').collection('pending_message').insertOne({
+                                    message: message,
+                                    receiverId: receiverId
+                                }, (err, res) => {
+                                    resolve(ok);
+                                })
+                            }
+                        })
                     }
                 })
             })
@@ -49,10 +54,10 @@ var send_message = (message, fburl) => {
     })
 }
 var fetch_message = (receiverId) => {
-    return new Promise ((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
-            let collect = db.db('cspheartsync').collection('pending_message')
+            var collect = db.db('cspheartsync').collection('pending_message')
             collect.find({
                 receiverId: receiverId
             }).toArray((err, res) => {
@@ -63,11 +68,9 @@ var fetch_message = (receiverId) => {
                             sendMessage.sendTextMessage(receiverId, element.message);
                         });
                     });
-                    resolve ('sent');
-                }
-                else 
-                {
-                    resolve ('none');
+                    resolve('sent');
+                } else {
+                    resolve('none');
                 }
                 collect.deleteMany({
                     receiverId: receiverId
@@ -76,7 +79,6 @@ var fetch_message = (receiverId) => {
         })
     })
 }
-
 module.exports = {
     send_message: send_message,
     fetch_message: fetch_message

@@ -7,6 +7,7 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     chooseFavorite = require('./database/chooseFavorite'),
     waiting_url = require('./database/waiting_url'),
     waiting_mess = require('./database/waiting_mess'),
+    send_anonymous_message = require('./database/send_anonymous_message'),
     endChat = require('./database/endchat');
 class asyncBot {
     reply(senderId, textInput) {
@@ -24,15 +25,15 @@ class asyncBot {
                 checkincovers.checkincovers(senderId).then(incovers => {
                     check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                         check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
-                            console.log (senderId + " " + is_waiting_mess)
+                            // console.log (senderId + " " + is_waiting_mess)
                             if (is_waiting_mess !== false) {
                                 send_anonymous_message.send_message(textInput, is_waiting_mess).then(res => {
-                                    if (res === 'not found') {
-                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
-                                    } else {
-                                        waiting_mess.remove(senderId);
+                                    if (res === 'ok') {
                                         sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
+                                    } else {
+                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
                                     }
+                                    waiting_mess.remove(senderId);
                                 })
                             } else if (is_waiting_url === true) {
                                 sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
