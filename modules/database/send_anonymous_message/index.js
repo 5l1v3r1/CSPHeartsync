@@ -59,7 +59,7 @@ var send_message = (message, fburl, message_type) => {
                                     receiverId: receiverId,
                                     message_type: message_type
                                 }, (err, res) => {
-                                    resolve(ok);
+                                    resolve('ok');
                                 })
                             }
                         })
