@@ -16,12 +16,12 @@ class asyncBot {
         if (textInput.toLowerCase() === 'stop receiving message')
         {
             receive_anonymous_message.stop_receiving (senderId);
-            sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ không nhận được những tin nhắn ẩn danh nữa")
+            sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ không nhận được những tin nhắn ẩn danh nữa")
         }
         else if (textInput.toLowerCase () === 'start receiving message')
         {
             receive_anonymous_message.start_receiving (senderId);
-            sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ tiếp tục nhận được những tin nhắn ẩn danh")
+            sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ tiếp tục nhận được những tin nhắn ẩn danh")
         }
         if (textInput.toLowerCase() === 'end') {
             endChat.endChat(senderId)
