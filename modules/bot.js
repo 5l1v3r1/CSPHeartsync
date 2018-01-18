@@ -83,6 +83,7 @@ class asyncBot {
 
     procPostback(senderId, payload) {
         switch (payload) {
+            console.log (payload)
             case "GET_STARTED":
                 {
                     this.get_started(senderId);
