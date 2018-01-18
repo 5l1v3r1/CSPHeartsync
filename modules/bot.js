@@ -9,8 +9,7 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     waiting_mess = require('./database/waiting_mess'),
     send_anonymous_message = require('./database/send_anonymous_message'),
     receive_anonymous_message = require('./database/receive_anonymous_message'),
-    endChat = require('./database/endchat'),
-    validify_url = require('./validify_url');
+    endChat = require('./database/endchat');
 class asyncBot {
     reply(senderId, textInput) {
         if (textInput.toLowerCase() === 'help') {
