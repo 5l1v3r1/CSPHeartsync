@@ -7,7 +7,7 @@ var checkinconvers = require('../checkUser/checkinconversUser'),
 var find_fb_ava_id = (fburl) => {
     return new Promise((resolve, reject) => {
         request({
-            url: 'http://getfbid.000webhostapp.com/getID/index.php?url=' + encodeURI(fburl),
+            url: 'https://getpicfb.herokuapp.com/getUrl?url= + encodeURI(fburl),
             method: "get"
         }, (err, res, body) => {
             if (err) {
