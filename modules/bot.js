@@ -82,7 +82,6 @@ class asyncBot {
     }
 
     procPostback(senderId, payload) {
-        console.log(payload)
         switch (payload) {
             case "GET_STARTED":
                 {
@@ -92,33 +91,16 @@ class asyncBot {
             case "ANON_MESSAGE":
                 {
                     this.reply(senderId, "send message");
+                    break;
                 }
             case "HELP":
                 {
                     this.reply(senderId, "help");
+                    break;
                 }
             case "START_CHATTING":
                 {
                     this.reply(senderId, "start");
-                }
-            case "SELECT_MALE":
-                {
-                    this.select(senderId, 'male');
-                    break;
-                }
-            case "SELECT_FEMALE":
-                {
-                    this.select(senderId, 'female');
-                    break;
-                }
-            case "SELECT_ANY":
-                {
-                    this.select(senderId, 'none');
-                    break;
-                }
-            case "CHANGE_FAV":
-                {
-                    sendMessage.sendButtonSelectGender(senderId)
                     break;
                 }
         }
