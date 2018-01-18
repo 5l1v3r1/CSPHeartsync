@@ -18,6 +18,7 @@ var find_fb_ava_id = (fburl) => {
                 throw (res.body.error);
                 resolve('not_found')
             }
+            if (body.toString () === 'user ')
             resolve(body);
         })
     })

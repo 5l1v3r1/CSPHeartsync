@@ -13,17 +13,25 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     validify_url = require('./validify_url');
 class asyncBot {
     reply(senderId, textInput) {
-        if (textInput.toLowerCase() === 'stop receiving message')
-        {
-            receive_anonymous_message.stop_receiving (senderId);
+        if (textInput.toLowerCase() === 'help') {
+            let inconvers = await (checkincovers.checkincovers(senderId));
+            if (inconvers === 2) {
+                let partnerId = await (getPartner.getPartner(senderId));
+                sendMessage.sendTextMessage(partnerId, textInput);
+            } else {
+                sendTextMessage(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot")
+                sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi")
+                sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi tin lời nhắn bí mật")
+                sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot")
+            }
+        }
+        if (textInput.toLowerCase() === 'stop receiving message') {
+            receive_anonymous_message.stop_receiving(senderId);
             sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ không nhận được những tin nhắn ẩn danh nữa")
-        }
-        else if (textInput.toLowerCase () === 'start receiving message')
-        {
-            receive_anonymous_message.start_receiving (senderId);
+        } else if (textInput.toLowerCase() === 'start receiving message') {
+            receive_anonymous_message.start_receiving(senderId);
             sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ tiếp tục nhận được những tin nhắn ẩn danh")
-        }
-        else if (textInput.toLowerCase() === 'end') {
+        } else if (textInput.toLowerCase() === 'end chat') {
             endChat.endChat(senderId)
         } else if (textInput.toLowerCase() === 'send message') {
             check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
@@ -44,19 +52,14 @@ class asyncBot {
                                     } else if (res === 'not receiving') {
                                         sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
                                     } else {
-                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
+                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đường link facebook của bạn bị lỗi", "Hãy kiểm tra lại đường link facebook");
                                     }
                                     waiting_mess.remove(senderId);
                                 })
                             } else if (is_waiting_url === true) {
-                                var ok = validify_url.check_url_validity(textInput);
-                                if (ok === false) {
-                                    sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận") } else {
-                                    var val = validify_url.validify(textInput);
-                                    sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
-                                    waiting_url.remove(senderId);
-                                    waiting_mess.add(senderId, val);
-                                }
+                                sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
+                                waiting_url.remove(senderId);
+                                waiting_mess.add(senderId, val);
                             } else if (incovers == null) {
                                 sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
                             } else if (incovers === 0) {
@@ -84,6 +87,18 @@ class asyncBot {
                 {
                     this.get_started(senderId);
                     break;
+                }
+            case "ANON_MESSAGE":
+                {
+                    this.reply(senderId, "send message");
+                }
+            case "HELP":
+                {
+                    this.reply(senderId, "help");
+                }
+            case "START_CHATTING":
+                {
+                    this.reply(senderId, "start");
                 }
             case "SELECT_MALE":
                 {
@@ -160,7 +175,7 @@ class asyncBot {
         })()
     }
     procVideo(senderId, payload) {
-        (async () => {
+        (async() => {
             checkincovers.checkincovers(senderId).then(incovers => {
                 check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                     check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
@@ -184,7 +199,7 @@ class asyncBot {
                         } else if (incovers === 1) {
                             sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3", "Cảm ơn bạn");
                         } else if (incovers === 2) {
-                            let partnerId = await(getPartner.getPartner(senderId));
+                            let partnerId = await (getPartner.getPartner(senderId));
                             sendMessage.sendVideo(partnerId, payload);
                         }
                     })
@@ -193,7 +208,7 @@ class asyncBot {
         })()
     }
     procAudio(senderId, payload) {
-        (async () => {
+        (async() => {
             checkincovers.checkincovers(senderId).then(incovers => {
                 check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                     check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
@@ -217,7 +232,7 @@ class asyncBot {
                         } else if (incovers === 1) {
                             sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3", "Cảm ơn bạn");
                         } else if (incovers === 2) {
-                            let partnerId = await(getPartner.getPartner(senderId));
+                            let partnerId = await (getPartner.getPartner(senderId));
                             sendMessage.sendAudio(partnerId, payload);
                         }
                     })

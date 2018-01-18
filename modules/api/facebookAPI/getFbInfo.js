@@ -5,7 +5,7 @@ var getFbInfo = (senderId) => {
         request({
             url: 'https://graph.facebook.com/v2.11/' + senderId,
             qs: {
-                access_token: process.env.PAGE_TOKEN || "EAALBIgDENZB8BAMavZBWhN7ECJnzsWtaZCOaaaZCZAfcw6qjDTQYMNQQqQ8Ix5pnWLN3m0h8MKOfoTosHjlwhF5bkQSdiHrwRyRPq9zEIqZAhWsL6JQYpkoNLhWB62C7yQZBc9zsZBZBmLuX6Ph9JzqMU490olnZBIamA6cRKLeZBJX2AZDZD"
+                access_token: process.env.PAGE_TOKEN
             },
             method: "GET"
         }, (err, res, body) => {
@@ -25,5 +25,4 @@ var getFbInfo = (senderId) => {
         })
     })
 }
-getFbInfo(1746618088744994)
 module.exports = { getFbInfo: getFbInfo };
