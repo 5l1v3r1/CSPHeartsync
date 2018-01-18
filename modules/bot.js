@@ -13,16 +13,17 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
 class asyncBot {
     reply(senderId, textInput) {
         if (textInput.toLowerCase() === 'help') {
-            let inconvers = await (checkincovers.checkincovers(senderId));
-            if (inconvers === 2) {
-                let partnerId = await (getPartner.getPartner(senderId));
-                sendMessage.sendTextMessage(partnerId, textInput);
-            } else {
-                sendTextMessage(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot")
-                sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi")
-                sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi tin lời nhắn bí mật")
-                sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot")
-            }
+            checkincovers.checkincovers(senderId).then(inconvers => {
+                if (inconvers === 2) {
+                    let partnerId = await (getPartner.getPartner(senderId));
+                    sendMessage.sendTextMessage(partnerId, textInput);
+                } else {
+                    sendTextMessage(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot")
+                    sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi")
+                    sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi tin lời nhắn bí mật")
+                    sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot")
+                }
+            })
         }
         if (textInput.toLowerCase() === 'stop receiving message') {
             receive_anonymous_message.stop_receiving(senderId);
@@ -30,7 +31,7 @@ class asyncBot {
         } else if (textInput.toLowerCase() === 'start receiving message') {
             receive_anonymous_message.start_receiving(senderId);
             sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ tiếp tục nhận được những tin nhắn ẩn danh")
-        } else if (textInput.toLowerCase() === 'end chat') {
+        } else if (textInput.toLowerCase() === 'end') {
             endChat.endChat(senderId)
         } else if (textInput.toLowerCase() === 'send message') {
             check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
@@ -81,7 +82,7 @@ class asyncBot {
     }
 
     procPostback(senderId, payload) {
-        console.log (payload)
+        console.log(payload)
         switch (payload) {
             case "GET_STARTED":
                 {
