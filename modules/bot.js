@@ -10,7 +10,7 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     send_anonymous_message = require('./database/send_anonymous_message'),
     receive_anonymous_message = require('./database/receive_anonymous_message'),
     endChat = require('./database/endchat');
-var get_help = async () =>
+var get_help = async (senderId) =>
 {
     let a = await (sendMessage.sendTextMessageWithPromise(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot"));
     let b = await (sendMessage.sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi"));
@@ -26,7 +26,7 @@ class asyncBot {
                         sendMessage.sendTextMessage(partnerId, textInput);
                     })
                 } else {
-                    get_help ();
+                    get_help (senderId);
                 }
             })
         } else if (textInput.toLowerCase() === 'stop receiving message') {
