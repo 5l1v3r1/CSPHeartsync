@@ -54,6 +54,7 @@ class asyncBot {
                             console.log ('');
                             console.log ('');
                             if (is_waiting_mess !== false) {
+                                console.log (textInput);
                                 send_anonymous_message.send_message(textInput, is_waiting_mess, 'text').then(res => {
                                     if (res === 'ok') {
                                         sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
