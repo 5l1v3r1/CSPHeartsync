@@ -10,6 +10,13 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     send_anonymous_message = require('./database/send_anonymous_message'),
     receive_anonymous_message = require('./database/receive_anonymous_message'),
     endChat = require('./database/endchat');
+var get_help = async () =>
+{
+    let a = await (sendMessage.sendTextMessageWithPromise(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot"));
+    let b = await (sendMessage.sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi"));
+    let c = await (sendMessage.sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi tin lời nhắn bí mật"));
+    let d = await (sendMessage.sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot"));
+}
 class asyncBot {
     reply(senderId, textInput) {
         if (textInput.toLowerCase() === 'help') {
@@ -19,10 +26,7 @@ class asyncBot {
                         sendMessage.sendTextMessage(partnerId, textInput);
                     })
                 } else {
-                    sendMessage.sendTextMessage(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot")
-                    sendMessage.sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi")
-                    sendMessage.sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi tin lời nhắn bí mật")
-                    sendMessage.sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot")
+                    get_help ();
                 }
             })
         } else if (textInput.toLowerCase() === 'stop receiving message') {
