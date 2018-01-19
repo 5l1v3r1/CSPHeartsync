@@ -14,22 +14,23 @@ var find_fb_ava_id = (fburl) => {
                 throw (err);
                 resolve('not_found');
             }
-            if (res.body.error) {
+            else if (res.body.error) {
                 throw (res.body.error);
                 resolve('not_found')
             }
-            if (body.toString () === 'user ')
-            resolve(body);
+            else if (body.toString () === 'user wrong')
+            {
+                resolve ('not found');
+            }
+            else resolve(body);
         })
     })
 }
 
 var send_message = (message, fburl, message_type) => {
-    console.log ('alo???');
     return new Promise((resolve, reject) => {
         find_fb_ava_id(fburl).then(img_id => {
-            console.log (img_id);
-            if (img_id == 'user wrong') {
+            if (img_id == 'not found') {
                 resolve('not found')
             } else {
                 mongodb.connect(url, (err, dbase) => {

@@ -49,10 +49,6 @@ class asyncBot {
                 checkincovers.checkincovers(senderId).then(incovers => {
                     check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                         check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
-                            console.log (is_waiting_mess);
-                            console.log (is_waiting_url);
-                            console.log ('');
-                            console.log ('');
                             if (is_waiting_mess !== false) {
                                 console.log (textInput);
                                 send_anonymous_message.send_message(textInput, is_waiting_mess, 'text').then(res => {
