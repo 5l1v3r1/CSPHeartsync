@@ -15,9 +15,8 @@ class asyncBot {
         if (textInput.toLowerCase() === 'help') {
             checkincovers.checkincovers(senderId).then(inconvers => {
                 if (inconvers === 2) {
-                    getPartner.getPartner(senderId).then(partnerId => {
-                        sendMessage.sendTextMessage(partnerId, textInput);
-                    })
+                    let partnerId = await (getPartner.getPartner(senderId));
+                    sendMessage.sendTextMessage(partnerId, textInput);
                 } else {
                     sendTextMessage(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot")
                     sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi")
