@@ -10,19 +10,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-
-app.get('/heartsyncbeta', (req, res) => {
+var lc = process.env.LOCATION;
+    wh = lc + '/webhook'
+app.get(lc, (req, res) => {
     res.send("It work!!");
 })
 
-app.get('/heartsyncbeta/webhook', function (req, res) {
+app.get(wh, function (req, res) {
     if (req.query['hub.verify_token'] === process.env.VERIFY_TOKEN|| '') {
         res.send(req.query['hub.challenge']);
     }
     res.send('Oops :< Wrong token. So sorry <3');
 });
 
-app.post('/heartsyncbeta/webhook', function (req, res) {
+app.post(wh, function (req, res) {
     var entries = req.body.entry;
     for (var entry of entries) {
         var messaging = entry.messaging;
