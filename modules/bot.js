@@ -13,17 +13,16 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
 class asyncBot {
     reply(senderId, textInput) {
         if (textInput.toLowerCase() === 'help') {
-            console.log ('ok');
             checkincovers.checkincovers(senderId).then(inconvers => {
                 if (inconvers === 2) {
                     getPartner.getPartner(senderId).then(partnerId => {
                         sendMessage.sendTextMessage(partnerId, textInput);
                     })
                 } else {
-                    sendTextMessage(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot")
-                    sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi")
-                    sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi tin lời nhắn bí mật")
-                    sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot")
+                    sendMessage.sendTextMessage(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot")
+                    sendMessage.sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi")
+                    sendMessage.sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi tin lời nhắn bí mật")
+                    sendMessage.sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot")
                 }
             })
         } else if (textInput.toLowerCase() === 'stop receiving message') {
