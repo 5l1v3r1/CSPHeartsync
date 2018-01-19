@@ -52,6 +52,7 @@ class asyncBot {
                             console.log (is_waiting_mess);
                             console.log (is_waiting_url);
                             console.log ('');
+                            console.log ('');
                             if (is_waiting_mess !== false) {
                                 send_anonymous_message.send_message(textInput, is_waiting_mess, 'text').then(res => {
                                     if (res === 'ok') {
