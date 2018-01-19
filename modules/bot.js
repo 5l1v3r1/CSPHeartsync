@@ -50,7 +50,6 @@ class asyncBot {
                     check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                         check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
                             if (is_waiting_mess !== false) {
-                                console.log (textInput);
                                 send_anonymous_message.send_message(textInput, is_waiting_mess, 'text').then(res => {
                                     if (res === 'ok') {
                                         sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
