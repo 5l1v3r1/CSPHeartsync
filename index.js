@@ -10,19 +10,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-
-app.get('/heartsyncbeta', (req, res) => {
+var addr = process.env.LOCALHOST_ADDR;
+app.get(addr, (req, res) => {
     res.send("It work!!");
 })
 
-app.get('/heartsyncbeta/webhook', function (req, res) {
+app.get(addr + '/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === process.env.VERIFY_TOKEN|| '') {
         res.send(req.query['hub.challenge']);
     }
     res.send('Oops :< Wrong token. So sorry <3');
 });
 
-app.post('/heartsyncbeta/webhook', function (req, res) {
+app.post(addr+'/webhook', function (req, res) {
     var entries = req.body.entry;
     for (var entry of entries) {
         var messaging = entry.messaging;
@@ -57,9 +57,8 @@ app.post('/heartsyncbeta/webhook', function (req, res) {
     res.status(200).send("OK");
 });
 
-
-app.set('port',  process.env.PORT || 2345);
-app.set('ip',process.env.IP || "127.0.0.1");
+app.set('port', process.env.PORTs);
+app.set('ip', process.env.IP || "127.0.0.1");
 
 server.listen(app.get('port'), app.get('ip'), function () {
     console.log("Express server listening at %s:%d ", app.get('ip'), app.get('port'));

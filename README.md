@@ -25,7 +25,6 @@
 
 ### Cách thiết lập: Thiết lập trong file ".env" đối với bạn nào dùng heroku thì thêm 1 file Procfile rồi thêm content nó là: web: node index.js
 + Mặc định MongoDB có url là: mongodb://localhost:27017
-+ Với bạn nào dùng VPS vui lòng mở port 2345
 + Sau khi hoàn tất dùng lệnh cài đặt các package cần thiết
 ```batch
     npm install 
