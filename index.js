@@ -57,7 +57,7 @@ app.post(addr+'/webhook', function (req, res) {
     res.status(200).send("OK");
 });
 
-app.set('port', process.env.PORTs);
+app.set('port', process.env.PORT);
 app.set('ip', process.env.IP || "127.0.0.1");
 
 server.listen(app.get('port'), app.get('ip'), function () {
