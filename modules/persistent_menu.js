@@ -9,13 +9,37 @@ var menu = {
                 "type": "nested",
                 "call_to_actions": [{
                         "title": "Ghép đôi",
-                        "type": "postback",
-                        "payload": "START_CHATTING"
+                        "type": "nested",
+                        "call_to_actions": [{
+                                "title": "Bắt đầu",
+                                "type": "postback",
+                                "payload": "START_CHATTING"
+                            },
+                            {
+                                "title": "Kết thúc (Hủy bỏ)",
+                                "type": "postback",
+                                "payload": "END_CHAT"
+                            }
+                        ]
                     },
                     {
                         "title": "Tin nhắn bí ẩn",
-                        "type": "postback",
-                        "payload": "ANON_MESSAGE"
+                        "type": "nested",
+                        "call_to_actions": [{
+                            "title": "Gửi tin",
+                            "type": "postback",
+                            "payload": "ANON_MESSAGE"
+                        },
+                        {
+                            "title": "Dừng nhận tin",
+                            "type": "postback",
+                            "payload": "STOP_RECEIVING"
+                        },
+                        {
+                            "title": "Tiếp tục nhận tin",
+                            "type": "postback",
+                            "payload": "START_RECEIVING"
+                        }]
                     }
                 ]
             },
@@ -23,6 +47,11 @@ var menu = {
                 "title": "Trợ giúp",
                 "type": "postback",
                 "payload": "HELP"
+            },
+            {
+                "title": "Liên hệ",
+                "type": "web_url",
+                "url": "https://www.facebook.com/ADAPT.CSP/"
             }
         ]
     }]

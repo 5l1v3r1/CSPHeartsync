@@ -10,12 +10,12 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     send_anonymous_message = require('./database/send_anonymous_message'),
     receive_anonymous_message = require('./database/receive_anonymous_message'),
     endChat = require('./database/endchat');
-var get_help = async (senderId) =>
-{
+var get_help = async(senderId) => {
     let a = await (sendMessage.sendTextMessageWithPromise(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot"));
     let b = await (sendMessage.sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi"));
     let c = await (sendMessage.sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi lời nhắn bí mật"));
     let d = await (sendMessage.sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot"));
+    let e = await (sendMessage.sendTextMessage(senderId, "CSP Heartsync là sản phẩm của câu lạc bộ ADaPT, được phát triển, điều hành bởi các thành viên của câu lạc bộ ADaPT. Mã nguồn của CSP Heartsync được cung cấp mở thông qua nền tảng github dưới giấy phép MIT. Mọi chi tiết xin liên hệ với chúng tôi ở fanpage CLB: https://www.facebook.com/ADAPT.CSP/"));
 }
 class asyncBot {
     reply(senderId, textInput) {
@@ -26,7 +26,7 @@ class asyncBot {
                         sendMessage.sendTextMessage(partnerId, textInput);
                     })
                 } else {
-                    get_help (senderId);
+                    get_help(senderId);
                 }
             })
         } else if (textInput.toLowerCase() === 'stop receiving message') {
@@ -108,6 +108,11 @@ class asyncBot {
                     this.reply(senderId, "start");
                     break;
                 }
+            case "END_CHAT":
+                {
+                    this.reply (senderId, "end");
+                    break;
+                }
             case "SELECT_MALE":
                 {
                     this.select(senderId, 'male');
@@ -126,6 +131,16 @@ class asyncBot {
             case "CHANGE_FAV":
                 {
                     sendMessage.sendButtonSelectGender(senderId)
+                    break;
+                }
+            case "STOP_RECEIVING":
+                {
+                    this.reply(senderId, "stop receiving message");
+                    break;
+                }
+            case "START_RECEIVING":
+                {
+                    this.reply(senderId, "start receiving message");
                     break;
                 }
         }
