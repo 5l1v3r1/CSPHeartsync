@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-var lc = process.env.LOCATION;
+var lc = process.env.WEBHOOK_LOCATION;
     wh = lc + '/webhook'
 app.get(lc, (req, res) => {
     res.send("It work!!");
