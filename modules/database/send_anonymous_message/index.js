@@ -25,6 +25,7 @@ var find_fb_ava_id = (fburl) => {
 }
 
 var send_message = (message, fburl, message_type) => {
+    console.log ('alo???');
     return new Promise((resolve, reject) => {
         find_fb_ava_id(fburl).then(img_id => {
             if (img_id == 'user wrong') {
