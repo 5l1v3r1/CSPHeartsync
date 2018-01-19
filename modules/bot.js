@@ -171,8 +171,9 @@ class asyncBot {
                         } else if (incovers === 1) {
                             sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3", "Cảm ơn bạn");
                         } else if (incovers === 2) {
-                            let partnerId = await (getPartner.getPartner(senderId));
-                            sendMessage.sendImage(partnerId, payload);
+                            getPartner.getPartner(senderId).then(partnerId => {
+                                sendMessage.sendImage(partnerId, payload);
+                            })
                         }
                     })
                 })
@@ -204,8 +205,10 @@ class asyncBot {
                         } else if (incovers === 1) {
                             sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3", "Cảm ơn bạn");
                         } else if (incovers === 2) {
-                            let partnerId = await (getPartner.getPartner(senderId));
-                            sendMessage.sendVideo(partnerId, payload);
+                            getPartner.getPartner(senderId)
+                                (partnerId => {
+                                    sendMessage.sendVideo(partnerId, payload);
+                                })
                         }
                     })
                 })
@@ -237,8 +240,10 @@ class asyncBot {
                         } else if (incovers === 1) {
                             sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3", "Cảm ơn bạn");
                         } else if (incovers === 2) {
-                            let partnerId = await (getPartner.getPartner(senderId));
-                            sendMessage.sendAudio(partnerId, payload);
+                            getPartner.getPartner(senderId)
+                                (partnerId => {
+                                    sendMessage.sendAudio(partnerId, payload);
+                                })
                         }
                     })
                 })
