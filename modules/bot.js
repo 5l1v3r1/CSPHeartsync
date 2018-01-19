@@ -104,6 +104,26 @@ class asyncBot {
                     this.reply(senderId, "start");
                     break;
                 }
+            case "SELECT_MALE":
+                {
+                    this.select(senderId, 'male');
+                    break;
+                }
+            case "SELECT_FEMALE":
+                {
+                    this.select(senderId, 'female');
+                    break;
+                }
+            case "SELECT_ANY":
+                {
+                    this.select(senderId, 'none');
+                    break;
+                }
+            case "CHANGE_FAV":
+                {
+                    sendMessage.sendButtonSelectGender(senderId)
+                    break;
+                }
         }
     }
     select(senderId, gender) {
