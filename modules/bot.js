@@ -67,7 +67,7 @@ class asyncBot {
                             } else if (is_waiting_url === true) {
                                 sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
                                 waiting_url.remove(senderId);
-                                waiting_mess.add(senderId, val);
+                                waiting_mess.add(senderId, textInput);
                             } else if (incovers == null) {
                                 sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
                             } else if (incovers === 0) {
