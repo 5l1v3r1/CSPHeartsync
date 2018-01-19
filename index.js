@@ -10,23 +10,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-var addr = process.env.LOCALHOST_ADDR,
-    webhook_addr = addr + '/webhook';
-console.log (webhook_addr);
+var addr = process.env.LOCALHOST_ADDR;
 app.get(addr, (req, res) => {
     res.send("It work!!");
-    console.log ("Connection successful");
 })
 
-app.get(webhook_addr, function (req, res) {
+app.get(addr + '/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === process.env.VERIFY_TOKEN|| '') {
         res.send(req.query['hub.challenge']);
-        console.log ("TOKEN VERIFIED")
     }
     res.send('Oops :< Wrong token. So sorry <3');
 });
 
-app.post(webhook_addr, function (req, res) {
+app.post(addr+'/webhook', function (req, res) {
     var entries = req.body.entry;
     for (var entry of entries) {
         var messaging = entry.messaging;
