@@ -27,9 +27,10 @@ var find_fb_ava_id = (fburl) => {
 var send_message = (message, fburl, message_type) => {
     return new Promise((resolve, reject) => {
         find_fb_ava_id(fburl).then(img_id => {
-            if (img_id == 'not_found') {
+            if (img_id == 'user wrong') {
                 resolve('not found')
             } else {
+                console.log (img_id);
                 mongodb.connect(url, (err, dbase) => {
                     if (err) throw err;
                     img_id = parseInt(img_id).toString()
