@@ -13,6 +13,7 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
 class asyncBot {
     reply(senderId, textInput) {
         if (textInput.toLowerCase() === 'help') {
+            console.log ('ok');
             checkincovers.checkincovers(senderId).then(inconvers => {
                 if (inconvers === 2) {
                     getPartner.getPartner(senderId).then(partnerId => {
@@ -25,8 +26,7 @@ class asyncBot {
                     sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot")
                 }
             })
-        }
-        if (textInput.toLowerCase() === 'stop receiving message') {
+        } else if (textInput.toLowerCase() === 'stop receiving message') {
             receive_anonymous_message.stop_receiving(senderId);
             sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Bạn sẽ không nhận được những tin nhắn ẩn danh nữa")
         } else if (textInput.toLowerCase() === 'start receiving message') {
