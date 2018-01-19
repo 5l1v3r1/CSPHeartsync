@@ -14,7 +14,7 @@ var get_help = async (senderId) =>
 {
     let a = await (sendMessage.sendTextMessageWithPromise(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot"));
     let b = await (sendMessage.sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi"));
-    let c = await (sendMessage.sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi tin lời nhắn bí mật"));
+    let c = await (sendMessage.sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi lời nhắn bí mật"));
     let d = await (sendMessage.sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot"));
 }
 class asyncBot {
@@ -49,6 +49,9 @@ class asyncBot {
                 checkincovers.checkincovers(senderId).then(incovers => {
                     check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                         check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
+                            console.log (is_waiting_mess);
+                            console.log (is_waiting_url);
+                            console.log ('');
                             if (is_waiting_mess !== false) {
                                 send_anonymous_message.send_message(textInput, is_waiting_mess, 'text').then(res => {
                                     if (res === 'ok') {
