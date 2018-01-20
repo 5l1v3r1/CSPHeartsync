@@ -1,5 +1,7 @@
 require('dotenv').config()
-var request = require('request');
+var mongodb = require ('mongodb').MongoClient,
+    url = 'mongodb://localhost:27017/cspheartsync',
+    request = require('request');
 var menu = {
         "persistent_menu": [{
             "locale": "default",
@@ -62,19 +64,27 @@ var menu = {
             "payload": "GET_STARTED_PAYLOAD"
         }
     }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
-        qs: {
-            access_token: process.env.PAGE_TOKEN
-        },
-        method: 'POST',
-        json: menu
+request({
+    url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
+    qs: {
+        access_token: process.env.PAGE_TOKEN
+    },
+    method: 'POST',
+    json: menu
+})
+request({
+    url = "https://graph.facebook.com/v2.6/me/messenger_profile",
+    qs: {
+        access_token: process.env.PAGE_TOKEN
+    },
+    method: 'POST',
+    json: get_started
+})
+mongodb.connect (url, (err, db) =>
+{
+    db.createUser ({
+        user: process.env.ACC_DB,
+        pwd: process.env.PWD,
+        roles: ["dbOwner"]
     })
-    request ({
-        url = "https://graph.facebook.com/v2.6/me/messenger_profile",
-        qs: {
-            access_token: process.env.PAGE_TOKEN
-        },
-        method: 'POST',
-        json: get_started
-    })
+})
