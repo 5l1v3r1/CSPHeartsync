@@ -73,7 +73,7 @@ request({
     json: menu
 })
 request({
-    url = "https://graph.facebook.com/v2.6/me/messenger_profile",
+    url: "https://graph.facebook.com/v2.6/me/messenger_profile",
     qs: {
         access_token: process.env.PAGE_TOKEN
     },
