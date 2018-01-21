@@ -53,8 +53,7 @@ class asyncBot {
                             check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
                                 if (confirm !== false) {
                                     if (textInput.toLowerCase() === 'yes' || textInput.toLowerCase() === 'y') {
-                                        console.log (confirm);
-                                        send_anonymous_message.send_message(confirm.mess.cont, confirm.fburl, confirm.mess.tp).then(res => {
+                                        send_anonymous_message.send_message(confirm.mess, confirm.fburl, confirm.tp).then(res => {
                                             if (res === 'ok') {
                                                 sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
                                             } else if (res === 'not receiving') {
