@@ -23,6 +23,7 @@ var remove_awaiting_input = (senderId) => {
             db.db('cspheartsync').collection('input_pending').deleteMany(
                 {
                     id: senderId,
+                    type: 'mess'
                 }
             )
         })
