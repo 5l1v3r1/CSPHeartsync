@@ -7,6 +7,7 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     chooseFavorite = require('./database/chooseFavorite'),
     waiting_url = require('./database/waiting_url'),
     waiting_mess = require('./database/waiting_mess'),
+    waiting_confirm = require('./database/waiting_confirm'),
     send_anonymous_message = require('./database/send_anonymous_message'),
     receive_anonymous_message = require('./database/receive_anonymous_message'),
     endChat = require('./database/endchat');
@@ -49,32 +50,45 @@ class asyncBot {
                 checkincovers.checkincovers(senderId).then(incovers => {
                     check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                         check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
-                            if (is_waiting_mess !== false) {
-                                send_anonymous_message.send_message(textInput, is_waiting_mess, 'text').then(res => {
-                                    if (res === 'ok') {
-                                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
-                                    } else if (res === 'not receiving') {
-                                        sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
+                            check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
+                                if (confirm !== false) {
+                                    if (textInput.toLowerCase() === 'yes' || textInput.toLowerCase() === 'y') {
+                                        send_anonymous_message.send_message(confirm.mess, confirm.fburl, 'text').then(res => {
+                                            if (res === 'ok') {
+                                                sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
+                                            } else if (res === 'not receiving') {
+                                                sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
+                                            } else {
+                                                sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đường link facebook của bạn bị lỗi", "Hãy kiểm tra lại đường link facebook");
+                                            }
+                                            waiting_confirm.remove(senderId);
+                                        })
+                                    } else if (textInput.toLowerCase() === 'no' || textInput.toLowerCase() === 'n') {
+                                        sendMessage.sendBotMessage(senderId, "Yêu cầu gửi tin nhắn đã được hủy", "Cảm ơn bạn");
+                                        waiting_confirm.remove(senderId);
                                     } else {
-                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đường link facebook của bạn bị lỗi", "Hãy kiểm tra lại đường link facebook");
+                                        sendMessage.sendButtonConfirm (senderId, confirm.fburl);
                                     }
+                                } else if (is_waiting_mess !== false) {
+                                    sendMessage.sendButtonConfirm(senderId, is_waiting_mess)
+                                    waiting_confirm.add(senderId, is_waiting_mess, textInput)
                                     waiting_mess.remove(senderId);
-                                })
-                            } else if (is_waiting_url === true) {
-                                sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
-                                waiting_url.remove(senderId);
-                                waiting_mess.add(senderId, textInput);
-                            } else if (incovers == null) {
-                                sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
-                            } else if (incovers === 0) {
-                                sendMessage.sendButtonSelectGender(senderId);
-                            } else if (incovers === 1) {
-                                sendMessage.sendTextMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3");
-                            } else if (incovers === 2) {
-                                getPartner.getPartner(senderId).then(partnerId => {
-                                    sendMessage.sendTextMessage(partnerId, textInput);
-                                })
-                            }
+                                } else if (is_waiting_url === true) {
+                                    sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
+                                    waiting_url.remove(senderId);
+                                    waiting_mess.add(senderId, textInput);
+                                } else if (incovers == null) {
+                                    sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
+                                } else if (incovers === 0) {
+                                    sendMessage.sendButtonSelectGender(senderId);
+                                } else if (incovers === 1) {
+                                    sendMessage.sendTextMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé ");
+                                } else if (incovers === 2) {
+                                    getPartner.getPartner(senderId).then(partnerId => {
+                                        sendMessage.sendTextMessage(partnerId, textInput);
+                                    })
+                                }
+                            })
                         })
                     })
                 })
@@ -83,7 +97,7 @@ class asyncBot {
     }
     get_started(senderId) {
         postInfoUser.postInfoUser(senderId);
-        sendMessage.sendBotMessage(senderId, "Chào bạn <3", "Chào mừng bạn đến với CSP Heartsync");
+        sendMessage.sendBotMessage(senderId, "Chào bạn", "Chào mừng bạn đến với CSP Heartsync");
     }
 
     procPostback(senderId, payload) {
@@ -110,7 +124,7 @@ class asyncBot {
                 }
             case "END_CHAT":
                 {
-                    this.reply (senderId, "end");
+                    this.reply(senderId, "end");
                     break;
                 }
             case "SELECT_MALE":
@@ -143,8 +157,18 @@ class asyncBot {
                     this.reply(senderId, "start receiving message");
                     break;
                 }
+            case "YES":
+                {
+                    this.reply(senderId, "yes");
+                    break;
+                }
+            case "NO":
+                {
+                    this.reply(senderId, "no");
+                    break;
+                }
         }
-    }; 
+    };
     select(senderId, gender) {
         (async() => {
             let res = await (chooseFavorite.chooseFavorite(senderId, gender));
@@ -153,14 +177,14 @@ class asyncBot {
                 sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
             }
             if (incovers === 0) {
-                sendMessage.sendBotMessage(senderId, "Đang tìm cặp cho bạn <3", res);
+                sendMessage.sendBotMessage(senderId, "Đang tìm cặp cho bạn", res);
                 pending.pending(senderId);
             }
             if (incovers === 1) {
-                sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Hãy gõ end và bấm phím bất kỳ để lựa chọn của bạn trở nên có hiệu lực nhé <3");
+                sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Hãy gõ end và bấm phím bất kỳ để lựa chọn của bạn trở nên có hiệu lực nhé ");
             }
             if (incovers === 2) {
-                sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Lựa chọn sẽ có hiệu lực trong cuộc trò chuyện tiếp theo <3");
+                sendMessage.sendBotMessage(senderId, "Lựa chọn đã được ghi nhận", "Lựa chọn sẽ có hiệu lực trong cuộc trò chuyện tiếp theo");
             }
         })()
     }
@@ -169,30 +193,35 @@ class asyncBot {
             checkincovers.checkincovers(senderId).then(incovers => {
                 check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                     check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
-                        if (is_waiting_url !== false) {
-                            sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
-                        } else if (is_waiting_mess !== false) {
-                            send_anonymous_message.send_message(payload, is_waiting_mess, 'img').then(res => {
-                                if (res === 'ok') {
-                                    sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
-                                } else if (res === 'not receiving') {
-                                    sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
-                                } else {
-                                    sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
-                                }
-                                waiting_mess.remove(senderId);
-                            });
-                        } else if (incovers == null) {
-                            sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
-                        } else if (incovers === 0) {
-                            sendMessage.sendButtonSelectGender(senderId);
-                        } else if (incovers === 1) {
-                            sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3", "Cảm ơn bạn");
-                        } else if (incovers === 2) {
-                            getPartner.getPartner(senderId).then(partnerId => {
-                                sendMessage.sendImage(partnerId, payload);
-                            })
-                        }
+                        check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
+                            if (confirm !== false) {
+                                sendMessage.sendButtonConfirm (senderId, confirm.fburl)
+                            }
+                            if (is_waiting_url !== false) {
+                                sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
+                            } else if (is_waiting_mess !== false) {
+                                send_anonymous_message.send_message(payload, is_waiting_mess, 'img').then(res => {
+                                    if (res === 'ok') {
+                                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
+                                    } else if (res === 'not receiving') {
+                                        sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
+                                    } else {
+                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
+                                    }
+                                    waiting_mess.remove(senderId);
+                                });
+                            } else if (incovers == null) {
+                                sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
+                            } else if (incovers === 0) {
+                                sendMessage.sendButtonSelectGender(senderId);
+                            } else if (incovers === 1) {
+                                sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé ", "Cảm ơn bạn");
+                            } else if (incovers === 2) {
+                                getPartner.getPartner(senderId).then(partnerId => {
+                                    sendMessage.sendImage(partnerId, payload);
+                                })
+                            }
+                        })
                     })
                 })
             })
@@ -203,31 +232,35 @@ class asyncBot {
             checkincovers.checkincovers(senderId).then(incovers => {
                 check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                     check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
-                        if (is_waiting_url !== false) {
-                            sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
-                        } else if (is_waiting_mess !== false) {
-                            send_anonymous_message.send_message(payload, is_waiting_mess, 'video').then(res => {
-                                if (res === 'ok') {
-                                    sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
-                                } else if (res === 'not receiving') {
-                                    sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
-                                } else {
-                                    sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
-                                }
-                                waiting_mess.remove(senderId);
-                            });
-                        } else if (incovers == null) {
-                            sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
-                        } else if (incovers === 0) {
-                            sendMessage.sendButtonSelectGender(senderId);
-                        } else if (incovers === 1) {
-                            sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3", "Cảm ơn bạn");
-                        } else if (incovers === 2) {
-                            getPartner.getPartner(senderId)
-                                (partnerId => {
+                        check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
+                            if (confirm !== false) {
+                                sendMessage.sendButtonConfirm (senderId, confirm.fburl)
+                            }
+                            if (is_waiting_url !== false) {
+                                sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
+                            } else if (is_waiting_mess !== false) {
+                                send_anonymous_message.send_message(payload, is_waiting_mess, 'video').then(res => {
+                                    if (res === 'ok') {
+                                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
+                                    } else if (res === 'not receiving') {
+                                        sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
+                                    } else {
+                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
+                                    }
+                                    waiting_mess.remove(senderId);
+                                });
+                            } else if (incovers == null) {
+                                sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
+                            } else if (incovers === 0) {
+                                sendMessage.sendButtonSelectGender(senderId);
+                            } else if (incovers === 1) {
+                                sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé ", "Cảm ơn bạn");
+                            } else if (incovers === 2) {
+                                getPartner.getPartner(senderId).then(partnerId => {
                                     sendMessage.sendVideo(partnerId, payload);
                                 })
-                        }
+                            }
+                        })
                     })
                 })
             })
@@ -238,31 +271,35 @@ class asyncBot {
             checkincovers.checkincovers(senderId).then(incovers => {
                 check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                     check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
-                        if (is_waiting_url !== false) {
-                            sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
-                        } else if (is_waiting_mess !== false) {
-                            send_anonymous_message.send_message(payload, is_waiting_mess, 'audio').then(res => {
-                                if (res === 'ok') {
-                                    sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
-                                } else if (res === 'not receiving') {
-                                    sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
-                                } else {
-                                    sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
-                                }
-                                waiting_mess.remove(senderId);
-                            });
-                        } else if (incovers == null) {
-                            sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
-                        } else if (incovers === 0) {
-                            sendMessage.sendButtonSelectGender(senderId);
-                        } else if (incovers === 1) {
-                            sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé <3", "Cảm ơn bạn");
-                        } else if (incovers === 2) {
-                            getPartner.getPartner(senderId)
-                                (partnerId => {
+                        check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
+                            if (confirm !== false) {
+                                sendMessage.sendButtonConfirm (senderId, confirm.fburl)
+                            }
+                            if (is_waiting_url !== false) {
+                                sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
+                            } else if (is_waiting_mess !== false) {
+                                send_anonymous_message.send_message(payload, is_waiting_mess, 'audio').then(res => {
+                                    if (res === 'ok') {
+                                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
+                                    } else if (res === 'not receiving') {
+                                        sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
+                                    } else {
+                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
+                                    }
+                                    waiting_mess.remove(senderId);
+                                });
+                            } else if (incovers == null) {
+                                sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
+                            } else if (incovers === 0) {
+                                sendMessage.sendButtonSelectGender(senderId);
+                            } else if (incovers === 1) {
+                                sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé ", "Cảm ơn bạn");
+                            } else if (incovers === 2) {
+                                getPartner.getPartner(senderId).then(partnerId => {
                                     sendMessage.sendAudio(partnerId, payload);
                                 })
-                        }
+                            }
+                        })
                     })
                 })
             })

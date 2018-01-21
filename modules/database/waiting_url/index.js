@@ -9,7 +9,8 @@ var add_awaiting_input = (senderId) => {
             db.db('cspheartsync').collection('input_pending').insertOne({
                 id : senderId,
                 type : 'url',
-                fburl : ''
+                fburl : '',
+                mess: ''
             })
         })
     })
