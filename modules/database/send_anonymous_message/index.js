@@ -33,7 +33,6 @@ var send_message = (message, fburl, message_type) => {
             if (img_id == 'not found') {
                 resolve('not found')
             } else {
-                console.log (message);
                 mongodb.connect(url, (err, dbase) => {
                     if (err) throw err;
                     img_id = parseInt(img_id).toString()
