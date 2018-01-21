@@ -232,7 +232,7 @@ class asyncBot {
                             if (is_waiting_url !== false) {
                                 sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
                             } else if (is_waiting_mess !== false) {
-                                sendMessage.sendButtonConfirm(senderId, confirm.fburl)
+                                sendMessage.sendButtonConfirm(senderId, is_waiting_mess)
                                 waiting_mess.remove(senderId)
                                 waiting_confirm.add(senderId, is_waiting_mess, textInput, 'video')
                             } else if (incovers == null) {
@@ -264,7 +264,7 @@ class asyncBot {
                             if (is_waiting_url !== false) {
                                 sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
                             } else if (is_waiting_mess !== false) {
-                                sendMessage.sendButtonConfirm(senderId, confirm.fburl)
+                                sendMessage.sendButtonConfirm(senderId, is_waiting_mess)
                                 waiting_mess.remove(senderId)
                                 waiting_confirm.add(senderId, is_waiting_mess, textInput, 'audio')
                             } else if (incovers == null) {
