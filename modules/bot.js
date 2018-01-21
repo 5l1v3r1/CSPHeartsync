@@ -51,6 +51,7 @@ class asyncBot {
                     check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                         check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
                             check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
+                                console.log (confirm)
                                 if (confirm !== false) {
                                     if (textInput.toLowerCase() === 'yes' || textInput.toLowerCase() === 'y') {
                                         send_anonymous_message.send_message(confirm.mess, confirm.fburl, 'text').then(res => {

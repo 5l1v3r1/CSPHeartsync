@@ -169,7 +169,7 @@ class sendMessage {
                         type: "template",
                         payload: {
                             template_type: "button",
-                            text: ("Bạn có chắc là muốn gửi tin nhắn trên đến cho người dùng: " + fburl + "chứ ???"),
+                            text: ("Bạn có chắc là muốn gửi tin nhắn trên đến cho người dùng: " + fburl + " chứ ???"),
                             buttons: [
                                 {
                                     type: "postback",
