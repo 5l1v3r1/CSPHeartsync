@@ -59,7 +59,7 @@ var menu = {
     },
     get_started = {
         "get_started": {
-            "payload": "GET_STARTED_PAYLOAD"
+            "payload": "GET_STARTED"
         }
     }
 request({
