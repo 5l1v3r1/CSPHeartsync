@@ -71,14 +71,12 @@ class asyncBot {
                                     }
                                 } else if (is_waiting_mess !== false) {
                                     sendMessage.sendButtonConfirm(senderId, is_waiting_mess)
-                                    waiting_mess.remove(senderId).then(a => {
-                                        waiting_confirm.add(senderId, is_waiting_mess, textInput)
-                                    })
+                                    waiting_mess.remove(senderId)
+                                    waiting_confirm.add(senderId, is_waiting_mess, textInput)
                                 } else if (is_waiting_url === true) {
                                     sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
-                                    waiting_url.remove(senderId).then(a => {
-                                        waiting_mess.add(senderId, textInput);
-                                    })
+                                    waiting_url.remove(senderId)
+                                    waiting_mess.add(senderId, textInput);
                                 } else if (incovers == null) {
                                     sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
                                 } else if (incovers === 0) {
