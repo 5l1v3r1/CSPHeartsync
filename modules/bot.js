@@ -51,7 +51,7 @@ class asyncBot {
                     check_waiting_input.check_waiting_input(senderId, 'url').then(is_waiting_url => {
                         check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
                             check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
-                                console.log (confirm)
+                                console.log(confirm);
                                 if (confirm !== false) {
                                     if (textInput.toLowerCase() === 'yes' || textInput.toLowerCase() === 'y') {
                                         send_anonymous_message.send_message(confirm.mess, confirm.fburl, 'text').then(res => {
@@ -68,16 +68,19 @@ class asyncBot {
                                         sendMessage.sendBotMessage(senderId, "Yêu cầu gửi tin nhắn đã được hủy", "Cảm ơn bạn");
                                         waiting_confirm.remove(senderId);
                                     } else {
-                                        sendMessage.sendButtonConfirm (senderId, confirm.fburl);
+                                        sendMessage.sendButtonConfirm(senderId, confirm.fburl);
                                     }
                                 } else if (is_waiting_mess !== false) {
                                     sendMessage.sendButtonConfirm(senderId, is_waiting_mess)
-                                    waiting_confirm.add(senderId, is_waiting_mess, textInput)
-                                    waiting_mess.remove(senderId);
+                                    waiting_mess.remove(senderId).then(a => {
+                                        waiting_confirm.add(senderId, is_waiting_mess, textInput)
+                                    })
                                 } else if (is_waiting_url === true) {
                                     sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
-                                    waiting_url.remove(senderId);
+                                    waiting_url.remove(senderId).then (a => 
+                                    {
                                     waiting_mess.add(senderId, textInput);
+                                    })
                                 } else if (incovers == null) {
                                     sendMessage.sendTextMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại")
                                 } else if (incovers === 0) {
@@ -196,7 +199,7 @@ class asyncBot {
                     check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
                         check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
                             if (confirm !== false) {
-                                sendMessage.sendButtonConfirm (senderId, confirm.fburl)
+                                sendMessage.sendButtonConfirm(senderId, confirm.fburl)
                             }
                             if (is_waiting_url !== false) {
                                 sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
@@ -235,7 +238,7 @@ class asyncBot {
                     check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
                         check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
                             if (confirm !== false) {
-                                sendMessage.sendButtonConfirm (senderId, confirm.fburl)
+                                sendMessage.sendButtonConfirm(senderId, confirm.fburl)
                             }
                             if (is_waiting_url !== false) {
                                 sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
@@ -274,7 +277,7 @@ class asyncBot {
                     check_waiting_input.check_waiting_input(senderId, 'mess').then(is_waiting_mess => {
                         check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
                             if (confirm !== false) {
-                                sendMessage.sendButtonConfirm (senderId, confirm.fburl)
+                                sendMessage.sendButtonConfirm(senderId, confirm.fburl)
                             }
                             if (is_waiting_url !== false) {
                                 sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
