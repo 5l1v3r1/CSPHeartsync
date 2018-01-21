@@ -16,7 +16,8 @@ var check_waiting_input = (senderId, input_type) => {
                     else {
                         resolve({
                             fburl: res[0].fburl,
-                            mess: res[0].mess
+                            mess: res[0].mess.cont,
+                            tp: res[0].mess.tp
                         });
                     }
 

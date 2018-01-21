@@ -2,7 +2,7 @@ require('dotenv').config();
 var mongodb = require('mongodb').MongoClient,
     url = process.env.URL_DB;
 
-var add_awaiting_input = (senderId, fburl, text) => {
+var add_awaiting_input = (senderId, fburl, mess, tp) => {
     return new Promise((resolve, reject) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
@@ -10,7 +10,10 @@ var add_awaiting_input = (senderId, fburl, text) => {
                 id: senderId,
                 type: 'confirm',
                 fburl: fburl,
-                mess: text
+                mess: {
+                    tp: tp,
+                    cont: mess
+                }
             })
         })
     })

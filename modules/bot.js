@@ -53,7 +53,7 @@ class asyncBot {
                             check_waiting_input.check_waiting_input(senderId, 'confirm').then(confirm => {
                                 if (confirm !== false) {
                                     if (textInput.toLowerCase() === 'yes' || textInput.toLowerCase() === 'y') {
-                                        send_anonymous_message.send_message(confirm.mess, confirm.fburl, 'text').then(res => {
+                                        send_anonymous_message.send_message(confirm.mess.cont, confirm.fburl, confirm.mess.tp).then(res => {
                                             if (res === 'ok') {
                                                 sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
                                             } else if (res === 'not receiving') {
@@ -72,7 +72,7 @@ class asyncBot {
                                 } else if (is_waiting_mess !== false) {
                                     sendMessage.sendButtonConfirm(senderId, is_waiting_mess)
                                     waiting_mess.remove(senderId)
-                                    waiting_confirm.add(senderId, is_waiting_mess, textInput)
+                                    waiting_confirm.add(senderId, is_waiting_mess, textInput, 'text')
                                 } else if (is_waiting_url === true) {
                                     sendMessage.sendBotMessage(senderId, "Nhập tin nhắn của bạn", "Cảm ơn bạn")
                                     waiting_url.remove(senderId)
@@ -200,16 +200,9 @@ class asyncBot {
                             if (is_waiting_url !== false) {
                                 sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
                             } else if (is_waiting_mess !== false) {
-                                send_anonymous_message.send_message(payload, is_waiting_mess, 'img').then(res => {
-                                    if (res === 'ok') {
-                                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
-                                    } else if (res === 'not receiving') {
-                                        sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
-                                    } else {
-                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
-                                    }
-                                    waiting_mess.remove(senderId);
-                                });
+                                sendMessage.sendButtonConfirm(senderId, confirm.fburl)
+                                waiting_mess.remove(senderId)
+                                waiting_confirm.add(senderId, is_waiting_mess, textInput, 'img')
                             } else if (incovers == null) {
                                 sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
                             } else if (incovers === 0) {
@@ -239,16 +232,9 @@ class asyncBot {
                             if (is_waiting_url !== false) {
                                 sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
                             } else if (is_waiting_mess !== false) {
-                                send_anonymous_message.send_message(payload, is_waiting_mess, 'video').then(res => {
-                                    if (res === 'ok') {
-                                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
-                                    } else if (res === 'not receiving') {
-                                        sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
-                                    } else {
-                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
-                                    }
-                                    waiting_mess.remove(senderId);
-                                });
+                                sendMessage.sendButtonConfirm(senderId, confirm.fburl)
+                                waiting_mess.remove(senderId)
+                                waiting_confirm.add(senderId, is_waiting_mess, textInput, 'video')
                             } else if (incovers == null) {
                                 sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
                             } else if (incovers === 0) {
@@ -278,16 +264,9 @@ class asyncBot {
                             if (is_waiting_url !== false) {
                                 sendMessage.sendBotMessage(senderId, "Đây không phải là 1 đường link hợp lệ", "Hãy nhập lại đường link facebook của người nhận")
                             } else if (is_waiting_mess !== false) {
-                                send_anonymous_message.send_message(payload, is_waiting_mess, 'audio').then(res => {
-                                    if (res === 'ok') {
-                                        sendMessage.sendBotMessage(senderId, "Tin nhắn đã được gửi thành công", "Cảm ơn bạn");
-                                    } else if (res === 'not receiving') {
-                                        sendMessage.sendBotMessage(senderId, "Người nhận không chấp nhận tin nhắn", "Tin nhắn không thể được gửi");
-                                    } else {
-                                        sendMessage.sendBotMessage(senderId, "Người dùng không tồn tại hoặc đã có lỗi xảy ra", "Xin lỗi bạn vì sự cố này");
-                                    }
-                                    waiting_mess.remove(senderId);
-                                });
+                                sendMessage.sendButtonConfirm(senderId, confirm.fburl)
+                                waiting_mess.remove(senderId)
+                                waiting_confirm.add(senderId, is_waiting_mess, textInput, 'audio')
                             } else if (incovers == null) {
                                 sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
                             } else if (incovers === 0) {
