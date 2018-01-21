@@ -10,21 +10,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-var lc = '/cspheartsync',
-    wh = lc + '/webhook';
-console.log ([lc, wh]);
-app.get(lc, (req, res) => {
+app.get('/cspheartsync', (req, res) => {
     res.send("It work!!");
 })
 
-app.get(wh, function (req, res) {
+app.get('/cspheartsync/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === process.env.VERIFY_TOKEN|| '') {
         res.send(req.query['hub.challenge']);
     }
     res.send('Oops :< Wrong token. So sorry <3');
 });
 
-app.post(wh, function (req, res) {
+app.post('/cspheartsync/webhook', function (req, res) {
     var entries = req.body.entry;
     for (var entry of entries) {
         var messaging = entry.messaging;
