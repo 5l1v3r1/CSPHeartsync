@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-var lc = 'cspheartsync',
+var lc = '/cspheartsync',
     wh = lc + '/webhook';
 console.log ([lc, wh]);
 app.get(lc, (req, res) => {
