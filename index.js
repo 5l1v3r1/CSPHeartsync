@@ -10,8 +10,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-var lc = process.env.WEBHOOK_LOCATION;
-    wh = lc + '/webhook'
+var lc = 'cspheartsync',
+    wh = lc + '/webhook';
+console.log (test);
 app.get(lc, (req, res) => {
     res.send("It work!!");
 })
