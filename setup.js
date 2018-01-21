@@ -1,7 +1,5 @@
 require('dotenv').config()
-var mongodb = require ('mongodb').MongoClient,
-    url = 'mongodb://localhost:27017/cspheartsync',
-    request = require('request');
+var request = require('request');
 var menu = {
         "persistent_menu": [{
             "locale": "default",
@@ -79,12 +77,4 @@ request({
     },
     method: 'POST',
     json: get_started
-})
-mongodb.connect (url, (err, db) =>
-{
-    db.createUser ({
-        user: process.env.ACC_DB,
-        pwd: process.env.PWD,
-        roles: ["dbOwner"]
-    })
 })
