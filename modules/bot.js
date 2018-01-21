@@ -202,7 +202,7 @@ class asyncBot {
                             } else if (is_waiting_mess !== false) {
                                 sendMessage.sendButtonConfirm(senderId, confirm.fburl)
                                 waiting_mess.remove(senderId)
-                                waiting_confirm.add(senderId, is_waiting_mess, textInput, 'img')
+                                waiting_confirm.add(senderId, is_waiting_mess, payload, 'img')
                             } else if (incovers == null) {
                                 sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
                             } else if (incovers === 0) {
@@ -234,7 +234,7 @@ class asyncBot {
                             } else if (is_waiting_mess !== false) {
                                 sendMessage.sendButtonConfirm(senderId, is_waiting_mess)
                                 waiting_mess.remove(senderId)
-                                waiting_confirm.add(senderId, is_waiting_mess, textInput, 'video')
+                                waiting_confirm.add(senderId, is_waiting_mess, payload, 'video')
                             } else if (incovers == null) {
                                 sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
                             } else if (incovers === 0) {
@@ -266,7 +266,7 @@ class asyncBot {
                             } else if (is_waiting_mess !== false) {
                                 sendMessage.sendButtonConfirm(senderId, is_waiting_mess)
                                 waiting_mess.remove(senderId)
-                                waiting_confirm.add(senderId, is_waiting_mess, textInput, 'audio')
+                                waiting_confirm.add(senderId, is_waiting_mess, payload, 'audio')
                             } else if (incovers == null) {
                                 sendMessage.sendBotMessage(senderId, "Đã có lỗi xảy ra. Vui lòng xóa tất cả inbox và thử lại", "Cảm ơn bạn")
                             } else if (incovers === 0) {
