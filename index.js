@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({
 }));
 var lc = 'cspheartsync',
     wh = lc + '/webhook';
-console.log (test);
+console.log ([lc, wh]);
 app.get(lc, (req, res) => {
     res.send("It work!!");
 })
