@@ -29,3 +29,5 @@ var execute = () => {
         })
     })
 }
+
+execute ();
