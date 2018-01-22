@@ -12,7 +12,7 @@ var pending = async (senderId) => {
         if (err) throw err;
         let collect = db.db('cspheartsync').collection('pending');
         collect.insert({
-            user_id: senderId.toString(),
+            _id: senderId.toString(),
             favorite: favorite,
             gender: gender
         }, (err, res) => {
