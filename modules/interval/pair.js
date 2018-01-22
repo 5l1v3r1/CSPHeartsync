@@ -1,4 +1,3 @@
-import { setInterval } from 'timers';
 require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
     url = process.env.URL_DB,
