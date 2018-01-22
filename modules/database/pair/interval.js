@@ -29,5 +29,3 @@ var execute = () => {
         })
     })
 }
-
-execute ();
