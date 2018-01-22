@@ -30,14 +30,14 @@ function execute() {
         var collection = db.db('cspheartsync').collection('users');
         var cursor = collection.find(),
             infos = []
-        cursor.each((err, user)) {
+        cursor.each((err, user) => {
             if (err) throw err;
             var info = get_info(user._id);
             infos.push({
                 id: user._id,
                 info: info
             })
-        }
+        })
         infos.forEach((item) => {
             var info = item.info;
             collection.updateOne({
