@@ -1,6 +1,6 @@
 require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
-    url = process.env.URL_DB,
+url = process.env.URL_DB,
     getFav = require('../checkUser/checkFav'),
     getGender = require('../checkUser/checkGender'),
     pair = require('./pair'),
@@ -12,13 +12,22 @@ var pending = async (senderId) => {
         if (err) throw err;
         let collect = db.db('cspheartsync').collection('pending');
         collect.insert({
-            _id: senderId.toString(),
+            user_id: senderId.toString(),
             favorite: favorite,
-            gender: gender,
-            timestamp: new Date().getTime().toString()
+            gender: gender
         }, (err, res) => {
             if (err) throw err;
             inconverPending.inconverPending(senderId)
+                .then(ress => {
+                    collect.count().then(res => {
+                        if (res >= 2) {
+                            collect.find().skip(res - 1).limit(1).toArray((err, result) => {
+                                pair.pair(result[0]._id.toString(), result[0].gender, result[0].favorite);
+                            })
+                        }
+                    })
+                })
+
         });
 
     })
