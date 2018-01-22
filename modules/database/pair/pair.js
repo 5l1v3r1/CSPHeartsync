@@ -152,8 +152,8 @@ var pair = (senderId, gender, fav) => {
                                         (err, result) => {
                                             let partnerId = result[0]._id;
                                             user_pair(senderId, partnerId, collect, list);
-                                            resolve ('unmatched');
                                         }
+                                        resolve ('unmatched');
                                     );
                                 }
                             }
