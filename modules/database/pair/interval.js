@@ -1,6 +1,6 @@
 require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
-    url = process.env.URL_DB || 'mongodb://admin:Matkhaula123@localhost:27017',
+    url = process.env.URL_DB,
     pair = require('./pair');
 var Pr = (collection) => {
     return new Promise((resolve, reject) => {
