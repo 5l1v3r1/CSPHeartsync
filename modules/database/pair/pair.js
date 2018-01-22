@@ -9,7 +9,7 @@ url = process.env.URL_DB,
 */
 var user_pair = (senderId, partnerId, collect, list) => {
     collect.deleteOne({
-        _id: partnerId.toString()
+        user_id: partnerId.toString()
     }, (err, obj) => {
         // console.log('bef');
         let paired = list.collection('paired');
@@ -46,7 +46,7 @@ var pair = (senderId, gender, fav) => {
         let list = database.db('cspheartsync');
         let collect = list.collection('pending');
         collect.deleteOne({
-            _id: senderId.toString()
+            user_id: senderId.toString()
         }, (err, obj) => {
             if (err) throw err;
             if (gender === 'male') {
@@ -66,7 +66,7 @@ var pair = (senderId, gender, fav) => {
                                         if (count === 0) // No match found, reinsert user to database
                                         {
                                             collect.insert({
-                                                _id: senderId.toString(),
+                                                user_id: senderId.toString(),
                                                 favorite: fav,
                                                 gender: gender
                                             }, (err, result) => {
@@ -79,7 +79,7 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
+                                                    let partnerId = result[0].user_id;
                                                     user_pair(senderId, partnerId, collect, list);
                                                     return 'matched'
                                                 }
@@ -94,7 +94,7 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'male'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
+                                        let partnerId = result[0].user_id;
                                         user_pair(senderId, partnerId, collect, list);
                                     }
                                     );
@@ -117,7 +117,7 @@ var pair = (senderId, gender, fav) => {
                                         if (count === 0) // No match found, reinsert user to database
                                         {
                                             collect.insert({
-                                                _id: senderId.toString(),
+                                                user_id: senderId.toString(),
                                                 favorite: fav,
                                                 gender: gender
                                             });
@@ -128,7 +128,7 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
+                                                    let partnerId = result[0].user_id;
                                                     user_pair(senderId, partnerId, collect, list);
                                                 }
                                                 );
@@ -142,7 +142,7 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'male'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
+                                        let partnerId = result[0].user_id;
                                         user_pair(senderId, partnerId, collect, list);
                                     }
                                     );
@@ -163,7 +163,7 @@ var pair = (senderId, gender, fav) => {
                                         if (count === 0) // No match found, reinsert user to database
                                         {
                                             collect.insert({
-                                                _id: senderId.toString(),
+                                                user_id: senderId.toString(),
                                                 favorite: fav,
                                                 gender: gender
                                             });
@@ -173,7 +173,7 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
+                                                    let partnerId = result[0].user_id;
                                                     user_pair(senderId, partnerId, collect, list);
                                                 }
                                                 );
@@ -186,7 +186,7 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'male'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
+                                        let partnerId = result[0].user_id;
                                         user_pair(senderId, partnerId, collect, list);
                                     }
                                     );
@@ -213,7 +213,7 @@ var pair = (senderId, gender, fav) => {
                                         if (count === 0) // No match found, reinsert user to database
                                         {
                                             collect.insert({
-                                                _id: senderId.toString(),
+                                                user_id: senderId.toString(),
                                                 favorite: fav,
                                                 gender: gender
                                             });
@@ -224,7 +224,7 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
+                                                    let partnerId = result[0].user_id;
                                                     user_pair(senderId, partnerId, collect, list);
                                                 }
                                                 );
@@ -238,7 +238,7 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'male'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
+                                        let partnerId = result[0].user_id;
                                         user_pair(senderId, partnerId, collect, list);
                                     }
                                     );
@@ -261,7 +261,7 @@ var pair = (senderId, gender, fav) => {
                                         if (count === 0) // No match found, reinsert user to database
                                         {
                                             collect.insert({
-                                                _id: senderId.toString(),
+                                                user_id: senderId.toString(),
                                                 favorite: fav,
                                                 gender: gender
                                             });
@@ -272,7 +272,7 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
+                                                    let partnerId = result[0].user_id;
                                                     user_pair(senderId, partnerId, collect, list);
                                                 }
                                                 );
@@ -286,7 +286,7 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'female'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
+                                        let partnerId = result[0].user_id;
                                         user_pair(senderId, partnerId, collect, list);
                                     }
                                     );
@@ -307,7 +307,7 @@ var pair = (senderId, gender, fav) => {
                                         if (count === 0) // No match found, reinsert user to database
                                         {
                                             collect.insert({
-                                                _id: senderId.toString(),
+                                                user_id: senderId.toString(),
                                                 favorite: fav,
                                                 gender: gender
                                             });
@@ -317,7 +317,7 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
+                                                    let partnerId = result[0].user_id;
                                                     user_pair(senderId, partnerId, collect, list);
                                                 }
                                                 );
@@ -330,7 +330,7 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'female'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
+                                        let partnerId = result[0].user_id;
                                         user_pair(senderId, partnerId, collect, list);
                                     }
                                     );
