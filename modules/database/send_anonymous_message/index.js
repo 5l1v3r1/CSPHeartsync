@@ -26,7 +26,6 @@ var find_fb_ava_id = (fburl) => {
         })
     })
 }
-
 var send_message = (message, fburl, message_type) => {
     return new Promise((resolve, reject) => {
         find_fb_ava_id(fburl).then(img_id => {
