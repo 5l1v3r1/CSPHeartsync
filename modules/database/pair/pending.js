@@ -1,11 +1,11 @@
 require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
-url = process.env.URL_DB,
+    url = process.env.URL_DB,
     getFav = require('../checkUser/checkFav'),
     getGender = require('../checkUser/checkGender'),
     pair = require('./pair'),
     inconverPending = require('../resUser/inconverPending');
-var pending = async (senderId) => {
+var pending = async(senderId) => {
     let favorite = await (getFav.checkFav(senderId));
     let gender = await (getGender.checkGender(senderId));
     mongodb.connect(url, (err, db) => {
@@ -14,22 +14,23 @@ var pending = async (senderId) => {
         collect.insert({
             _id: senderId.toString(),
             favorite: favorite,
-            gender: gender
+            gender: gender,
+            timestamp: new Date().getTime().toString()
         }, (err, res) => {
             if (err) throw err;
             inconverPending.inconverPending(senderId)
                 .then(ress => {
                     collect.count().then(res => {
                         if (res >= 2) {
-                            collect.find().skip(res - 1).limit(1).toArray((err, result) => {
+                            collect.find().sort({
+                                _time: 1
+                            }).limit(1).toArray((err, result) => {
                                 pair.pair(result[0]._id.toString(), result[0].gender, result[0].favorite);
                             })
                         }
                     })
                 })
-
         });
-
     })
 }
 

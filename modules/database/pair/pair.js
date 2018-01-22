@@ -42,6 +42,7 @@ var user_pair = (senderId, partnerId, collect, list) => {
     });
 }
 var pair = (senderId, gender, fav) => {
+    console.log ('pair started');
     mongodb.connect(url, (err, database) => {
         let list = database.db('cspheartsync');
         let collect = list.collection('pending');

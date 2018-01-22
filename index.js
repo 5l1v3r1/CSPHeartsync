@@ -1,8 +1,9 @@
+require('dotenv').config()
 var app = require('express')(),
     bodyParser = require('body-parser'),
     http = require('http'),
-    bot = require('./modules/bot');
-    require('dotenv').config()
+    bot = require('./modules/bot'),
+    pair = require ('./modules/interval/pair');
 
 
 server = http.createServer(app);
@@ -63,3 +64,5 @@ app.set('ip',process.env.IP || "127.0.0.1");
 server.listen(app.get('port'), app.get('ip'), function () {
     console.log("Express server listening at %s:%d ", app.get('ip'), app.get('port'));
 });
+
+pair.pair ();
