@@ -13,10 +13,11 @@ var checkincovers = require('./database/checkUser/checkinconversUser'),
     receive_anonymous_message = require('./database/receive_anonymous_message'),
     endChat = require('./database/endchat');
 var get_help = async(senderId) => {
-    let a = await (sendMessage.sendTextMessageWithPromise(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện. Bạn cũng có thể bấm vào mục bắt đầu trò chuyện ở menu chatbot"));
+    let a = await (sendMessage.sendTextMessageWithPromise(senderId, "Gõ một từ bất kỳ để bắt đầu một cuộc trò chuyện."));
     let b = await (sendMessage.sendTextMessage(senderId, "Gõ \"end\" khi đang trò chuyện để kết thúc cuộc trò chuyện đó, hoặc khi đang ở trong hàng đợi để thoát khỏi hàng đợi"));
-    let c = await (sendMessage.sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi lời nhắn bí mật"));
+    let c = await (sendMessage.sendTextMessage(senderId, "Gõ \"send message\" để bắt đầu chức năng gửi lời nhắn bí mật. Bạn có thể gửi một tin nhắn đến một người dùng khác nếu bạn cung cấp được cho chatbot link facebook của nguời nhận. Tuy nhiên chatbot chỉ có thể nhắn tin đến cho người dùng của page và đã sử dụng ít nhất một lần kể từ khi update"));
     let d = await (sendMessage.sendTextMessage(senderId, "Gõ \"help\" để được trợ giúp về cách sử dụng chatbot"));
+    let f = await (sendMessage.sendTextMessage(senderId, "Và luôn nhớ rằng bạn có thể thực hiện những việc trên thông qua menu chatbot. Để truy cập vào menu chatbot, bấm vào hình có 3 gạch màu xanh ở cạnh khung nhập tin nhắn."));
     let e = await (sendMessage.sendTextMessage(senderId, "CSP Heartsync là sản phẩm của câu lạc bộ ADaPT, được phát triển, điều hành bởi các thành viên của câu lạc bộ ADaPT. Mã nguồn của CSP Heartsync được cung cấp mở thông qua nền tảng github dưới giấy phép MIT. Mọi chi tiết xin liên hệ với chúng tôi ở fanpage CLB: https://www.facebook.com/ADAPT.CSP/"));
 }
 class asyncBot {
