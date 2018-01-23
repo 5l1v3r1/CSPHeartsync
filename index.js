@@ -3,7 +3,8 @@ var app = require('express')(),
     bodyParser = require('body-parser'),
     http = require('http'),
     bot = require('./modules/bot'),
-    pair = require ('./modules/interval/pair');
+    pair = require ('./modules/interval/pair'),
+    update = require ('./modules/interval/update_info')
 
 
 server = http.createServer(app);
@@ -66,3 +67,4 @@ server.listen(app.get('port'), app.get('ip'), function () {
 });
 
 pair.pair ();
+update.update ();

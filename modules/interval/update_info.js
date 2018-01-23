@@ -58,3 +58,7 @@ function run ()
 {
     setInterval (execute, 1800000);
 }
+
+module.exports = {
+    update : run
+}
