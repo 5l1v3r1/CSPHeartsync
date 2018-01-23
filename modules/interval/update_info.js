@@ -25,6 +25,7 @@ var get_info = (senderId) => {
 }
 
 function execute() {
+    console.log ('updating ' + (new Date ().getTime ()).toString());
     mongodb.connect(url, (err, db) => {
         if (err) throw err;
         var collection = db.db('cspheartsync').collection('users');
@@ -32,18 +33,20 @@ function execute() {
             infos = []
         cursor.each((err, user) => {
             if (err) throw err;
-            var info = get_info(user._id);
-            infos.push({
-                id: user._id,
-                info: info
-            })
+            if (user) {
+                var info = get_info(user._id);
+                infos.push({
+                    id: user._id,
+                    info: info
+                })
+            }
         })
         infos.forEach((item) => {
             var info = item.info;
             collection.updateOne({
                 _id: item.id,
             }, {
-                $set :{
+                $set: {
                     name: info,
                     profile_pic: info.profile_pic,
                     gender: info.gender,
@@ -54,11 +57,10 @@ function execute() {
     })
 }
 
-function run ()
-{
-    setInterval (execute, 1800000);
+function run() {
+    setInterval(execute, 1800000);
 }
 
 module.exports = {
-    update : run
+    update: run
 }
