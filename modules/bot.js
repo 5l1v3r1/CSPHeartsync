@@ -82,7 +82,7 @@ class asyncBot {
                                 } else if (incovers === 0) {
                                     sendMessage.sendButtonSelectGender(senderId);
                                 } else if (incovers === 1) {
-                                    sendMessage.sendTextMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé ");
+                                    sendMessage.sendBotMessage(senderId, "Bạn vẫn đang ở trong hàng đợi. Vui lòng chờ thêm một lúc nữa nhé ", "Cảm ơn bạn");
                                 } else if (incovers === 2) {
                                     getPartner.getPartner(senderId).then(partnerId => {
                                         sendMessage.sendTextMessage(partnerId, textInput);
