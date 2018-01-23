@@ -11,7 +11,7 @@ var user_pair = (senderId, partnerId, collect, list) => {
     collect.deleteOne({
         _id: partnerId.toString()
     }, (err, obj) => {
-        console.log('bef');
+        // console.log('bef');
         let paired = list.collection('paired');
         pairr.pairr(senderId)
             .then(a => {

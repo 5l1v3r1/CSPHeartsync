@@ -131,17 +131,55 @@ class sendMessage {
                             buttons: [{
                                     type: "postback",
                                     payload: "SELECT_MALE",
-                                    title: "Nam nhé :D"
+                                    title: "Nam"
                                 },
                                 {
                                     type: "postback",
                                     payload: "SELECT_FEMALE",
-                                    title: "Nữ nhé :D"
+                                    title: "Nữ"
                                 },
                                 {
                                     type: "postback",
                                     payload: "SELECT_ANY",
-                                    title: "Nam hay nữ đều được nhé :D"
+                                    title: "Nam hay nữ đều được"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }, (err, res, body) => {
+            if (err) return console.log("Error: " + err)
+            if (res.body.error) return console.log("err: " + res.body.error)
+        })
+    }
+    sendButtonConfirm(senderId, fburl) {
+        request({
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {
+                access_token: this._token
+            },
+            method: "POST",
+            json: {
+                recipient: {
+                    id: senderId
+                },
+                message: {
+                    attachment: {
+                        type: "template",
+                        payload: {
+                            template_type: "button",
+                            text: ("Bạn có chắc là muốn gửi tin nhắn trên đến cho người dùng: " + fburl + " chứ ???"),
+                            buttons: [
+                                {
+                                    type: "postback",
+                                    payload: "YES",
+                                    title: "Có"
+                                },
+                                {
+                                    type: "postback",
+                                    payload: "NO",
+                                    title: "Không"
                                 }
                             ]
                         }

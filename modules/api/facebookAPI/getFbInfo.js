@@ -5,7 +5,7 @@ var getFbInfo = (senderId) => {
         request({
             url: 'https://graph.facebook.com/v2.11/' + senderId,
             qs: {
-                access_token: process.env.PAGE_TOKEN || ""
+                access_token: process.env.PAGE_TOKEN
             },
             method: "GET"
         }, (err, res, body) => {
@@ -17,11 +17,12 @@ var getFbInfo = (senderId) => {
                 gender: body.gender,
                 _id: body.id + "",
                 favorite: "none",
-                inconversation: 0 //0 no, 1 pending, 2 yep
+                inconversation: 0, //0 no, 1 pending, 2 yep
+                pic_id: body.profile_pic.split('_')[1].toString(),
+                accept_mess: true
             };
             resolve(obj);
         })
     })
 }
-
 module.exports = { getFbInfo: getFbInfo };
