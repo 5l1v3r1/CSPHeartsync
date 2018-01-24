@@ -11,15 +11,18 @@ var get_info = (senderId) => {
             },
             method: "GET"
         }, (err, res, body) => {
-            if (err) return reject(err);
-            body = JSON.parse(body);
-            var obj = {
-                name: body.last_name + " " + body.first_name,
-                profile_pic: body.profile_pic,
-                gender: body.gender,
-                pic_id: body.profile_pic.split('_')[1].toString(),
-            };
-            resolve(obj);
+            if (err) reject(err);
+            if (body)
+            {
+                body = JSON.parse(body);
+                var obj = {
+                    name: body.last_name + " " + body.first_name,
+                    profile_pic: body.profile_pic,
+                    gender: body.gender,
+                    pic_id: body.profile_pic.split('_')[1].toString(),
+                };
+                resolve(obj);
+            }
         })
     })
 }
@@ -43,16 +46,19 @@ function execute() {
         })
         infos.forEach((item) => {
             var info = item.info;
-            collection.updateOne({
+            if (info !== 'nah') 
+            {
+                collection.updateOne({
                 _id: item.id,
-            }, {
-                $set: {
-                    name: info,
-                    profile_pic: info.profile_pic,
-                    gender: info.gender,
-                    pic_id: info.pic_id
-                }
-            })
+                }, {
+                    $set: {
+                        name: info.name,
+                        profile_pic: info.profile_pic,
+                        gender: info.gender,
+                        pic_id: info.pic_id
+                    }
+                })
+            }   
         })
     })
 }
