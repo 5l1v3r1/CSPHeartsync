@@ -5,6 +5,14 @@ var checkinconvers = require('../checkUser/checkinconversUser'),
     url = 'mongodb://127.0.0.1:27017',
     sendMessage = require('../../api/facebookAPI/sendMessage');
 var find_fb_ava_id = (fburl) => {
+    if(/profile.php/.test(fburl){
+    if(fburl.split('=').length==2){
+    fburl=fburl.split('=')[1];
+}
+   else{
+    fburl=fburl.split(/=(.*?)&/)[1]
+}
+}
     return new Promise((resolve, reject) => {
         request({
             url: 'https://getpicfb.herokuapp.com/getUrl?url=' + encodeURI(fburl),
@@ -26,6 +34,7 @@ var find_fb_ava_id = (fburl) => {
         })
     })
 }
+
 var send_message = (message, fburl, message_type) => {
     return new Promise((resolve, reject) => {
         find_fb_ava_id(fburl).then(img_id => {
