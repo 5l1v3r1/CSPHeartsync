@@ -4,28 +4,31 @@ var checkinconvers = require('../checkUser/checkinconversUser'),
     request = require('request'),
     url = 'mongodb://127.0.0.1:27017',
     sendMessage = require('../../api/facebookAPI/sendMessage');
-var find_fb_ava_id = (fburl) => {
-    return new Promise((resolve, reject) => {
-        request({
-            url: 'https://getpicfb.herokuapp.com/getUrl?url=' + encodeURI(fburl),
-            method: "get"
-        }, (err, res, body) => {
-            if (err) {
-                throw (err);
-                resolve('not_found');
-            }
-            else if (res.body.error) {
-                throw (res.body.error);
-                resolve('not_found')
-            }
-            else if (body.toString () === 'user wrong')
-            {
-                resolve ('not found');
-            }
-            else resolve(body);
-        })
-    })
-}
+    var find_fb_ava_id = (fburl) => {
+        if(RegExp('/profile.php/').test(fburl)) {
+        fburl = fburl.split('id=')[1]
+        }
+            return new Promise((resolve, reject) => {
+                request({
+                    url: 'https://getpicfb.herokuapp.com/getUrl?url=' + encodeURI(fburl),
+                    method: "get"
+                }, (err, res, body) => {
+                    if (err) {
+                        throw (err);
+                        resolve('not_found');
+                    }
+                    else if (res.body.error) {
+                        throw (res.body.error);
+                        resolve('not_found')
+                    }
+                    else if (body.toString () === 'user wrong')
+                    {
+                        resolve ('not found');
+                    }
+                    else resolve(body);
+                })
+            })
+        }
 var send_message = (message, fburl, message_type) => {
     return new Promise((resolve, reject) => {
         find_fb_ava_id(fburl).then(img_id => {
