@@ -1,6 +1,6 @@
 require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
-url = 'mongodb://localhost:27017';
+url = process.env.URL_DB || 'mongodb://localhost:27017';
 var check_in_db = (senderId) => {
     return new Promise((resolve, reject) => {
         mongodb.connect(url, (err, db) => {

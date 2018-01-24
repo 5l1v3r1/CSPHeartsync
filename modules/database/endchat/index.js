@@ -1,6 +1,6 @@
 require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
-    url = 'mongodb://localhost:27017',
+    url = process.env.URL_DB || 'mongodb://localhost:27017',
     endC = require('../resUser/endChat'),
     sendMessage = require('../../api/facebookAPI/sendMessage'),
     send_anonymous_message = require('../send_anonymous_message'),

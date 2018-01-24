@@ -1,7 +1,7 @@
 require('dotenv').config()
 var request = require('request'),
     mongodb = require('mongodb').MongoClient,
-    url = 'mongodb://localhost:27017';
+    url = process.env.URL_DB || 'mongodb://localhost:27017';
 var get_info = (senderId) => {
     return new Promise((resolve, reject) => {
         request({
