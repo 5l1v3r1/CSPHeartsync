@@ -4,14 +4,10 @@ var checkinconvers = require('../checkUser/checkinconversUser'),
     request = require('request'),
     url = 'mongodb://127.0.0.1:27017',
     sendMessage = require('../../api/facebookAPI/sendMessage');
-var find_fb_ava_id = (fburl) => {
-        if (/profile.php/.test(fburl) {
-                if (fburl.split('=').length == 2) {
-                    fburl = fburl.split('=')[1];
-                } else {
-                    fburl = fburl.split(/=(.*?)&/)[1]
-                }
-            }
+    var find_fb_ava_id = (fburl) => {
+        if(RegExp('/profile.php/').test(fburl)) {
+        fburl = fburl.split('id=')[1]
+        }
             return new Promise((resolve, reject) => {
                 request({
                     url: 'https://getpicfb.herokuapp.com/getUrl?url=' + encodeURI(fburl),
@@ -20,103 +16,106 @@ var find_fb_ava_id = (fburl) => {
                     if (err) {
                         throw (err);
                         resolve('not_found');
-                    } else if (res.body.error) {
+                    }
+                    else if (res.body.error) {
                         throw (res.body.error);
                         resolve('not_found')
-                    } else if (body.toString() === 'user wrong') {
-                        resolve('not found');
-                    } else resolve(body);
-                })
-            })
-        }
-
-        var send_message = (message, fburl, message_type) => {
-            return new Promise((resolve, reject) => {
-                find_fb_ava_id(fburl).then(img_id => {
-                    if (img_id == 'not found') {
-                        resolve('not found')
-                    } else {
-                        mongodb.connect(url, (err, dbase) => {
-                            if (err) throw err;
-                            img_id = parseInt(img_id).toString()
-                            dbase.db('cspheartsync').collection('users').find({
-                                pic_id: img_id
-                            }).toArray((err, res) => {
-                                if (err) throw err;
-                                if (res == null || typeof res == 'undefined' || res.length == 0) {
-                                    resolve('not_found');
-                                } else {
-                                    let receiverId = res[0]._id;
-                                    if (res[0].accept_mess === false) {
-                                        resolve('not receiving')
-                                    } else {
-                                        checkinconvers.checkincovers(receiverId).then(inconvers => {
-                                            if (inconvers === 0) {
-                                                sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có một tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(result => {
-                                                    if (message_type == 'text') {
-                                                        sendMessage.sendTextMessage(receiverId, message);
-                                                    } else if (message_type == 'img') {
-                                                        sendMessage.sendImage(receiverId, message);
-                                                    } else if (message_type == 'video') {
-                                                        sendMessage.sendVideo(receiverId, message);
-                                                    } else if (message_type == 'audio') {
-                                                        sendMessage.sendAudio(receiverId, message);
-                                                    }
-                                                    resolve('ok');
-                                                })
-                                            } else {
-                                                dbase.db('cspheartsync').collection('pending_message').insertOne({
-                                                    message: message,
-                                                    receiverId: receiverId,
-                                                    message_type: message_type
-                                                }, (err, res) => {
-                                                    resolve('ok');
-                                                })
-                                            }
-                                        })
-                                    }
-                                }
-                            })
-                        })
                     }
+                    else if (body.toString () === 'user wrong')
+                    {
+                        resolve ('not found');
+                    }
+                    else resolve(body);
                 })
             })
         }
-        var fetch_message = (receiverId) => {
-            return new Promise((resolve, reject) => {
-                mongodb.connect(url, (err, db) => {
+var send_message = (message, fburl, message_type) => {
+    return new Promise((resolve, reject) => {
+        find_fb_ava_id(fburl).then(img_id => {
+            if (img_id == 'not found') {
+                resolve('not found')
+            } else {
+                mongodb.connect(url, (err, dbase) => {
                     if (err) throw err;
-                    var collect = db.db('cspheartsync').collection('pending_message')
-                    collect.find({
-                        receiverId: receiverId
+                    img_id = parseInt(img_id).toString()
+                    dbase.db('cspheartsync').collection('users').find({
+                        pic_id: img_id
                     }).toArray((err, res) => {
                         if (err) throw err;
-                        if (res.length != 0) {
-                            sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có " + res.length + " tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
-                                res.forEach(element => {
-                                    if (element.message_type == 'text') {
-                                        sendMessage.sendTextMessage(receiverId, element.message);
-                                    } else if (element.message_type == 'img') {
-                                        sendMessage.sendImage(receiverId, element.message);
-                                    } else if (element.message_type == 'video') {
-                                        sendMessage.sendVideo(receiverId, element.message);
-                                    } else if (element.message_type == 'audio') {
-                                        sendMessage.sendAudio(receiverId, element.message);
-                                    }
-                                });
-                            });
-                            resolve('sent');
+                        if (res == null || typeof res == 'undefined' || res.length == 0) {
+                            resolve('not_found');
                         } else {
-                            resolve('none');
+                            let receiverId = res[0]._id;
+                            if (res[0].accept_mess === false) {
+                                resolve('not receiving')
+                            } else {
+                                checkinconvers.checkincovers(receiverId).then(inconvers => {
+                                    if (inconvers === 0) {
+                                        sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có một tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(result => {
+                                            if (message_type == 'text') {
+                                                sendMessage.sendTextMessage(receiverId, message);
+                                            } else if (message_type == 'img') {
+                                                sendMessage.sendImage(receiverId, message);
+                                            } else if (message_type == 'video') {
+                                                sendMessage.sendVideo(receiverId, message);
+                                            } else if (message_type == 'audio') {
+                                                sendMessage.sendAudio(receiverId, message);
+                                            }
+                                            resolve('ok');
+                                        })
+                                    } else {
+                                        dbase.db('cspheartsync').collection('pending_message').insertOne({
+                                            message: message,
+                                            receiverId: receiverId,
+                                            message_type: message_type
+                                        }, (err, res) => {
+                                            resolve('ok');
+                                        })
+                                    }
+                                })
+                            }
                         }
-                        collect.deleteMany({
-                            receiverId: receiverId
-                        })
                     })
                 })
+            }
+        })
+    })
+}
+var fetch_message = (receiverId) => {
+    return new Promise((resolve, reject) => {
+        mongodb.connect(url, (err, db) => {
+            if (err) throw err;
+            var collect = db.db('cspheartsync').collection('pending_message')
+            collect.find({
+                receiverId: receiverId
+            }).toArray((err, res) => {
+                if (err) throw err;
+                if (res.length != 0) {
+                    sendMessage.sendBotMessageWithPromise(receiverId, "Bạn có " + res.length + " tin nhắn bí ẩn", "Tin nhắn sẽ gửi ngay bây giờ").then(a => {
+                        res.forEach(element => {
+                            if (element.message_type == 'text') {
+                                sendMessage.sendTextMessage(receiverId, element.message);
+                            } else if (element.message_type == 'img') {
+                                sendMessage.sendImage(receiverId, element.message);
+                            } else if (element.message_type == 'video') {
+                                sendMessage.sendVideo(receiverId, element.message);
+                            } else if (element.message_type == 'audio') {
+                                sendMessage.sendAudio(receiverId, element.message);
+                            }
+                        });
+                    });
+                    resolve('sent');
+                } else {
+                    resolve('none');
+                }
+                collect.deleteMany({
+                    receiverId: receiverId
+                })
             })
-        }
-        module.exports = {
-            send_message: send_message,
-            fetch_message: fetch_message
-        }
+        })
+    })
+}
+module.exports = {
+    send_message: send_message,
+    fetch_message: fetch_message
+}
