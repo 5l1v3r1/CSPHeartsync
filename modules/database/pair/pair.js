@@ -46,7 +46,8 @@ var user_pair = (senderId, partnerId, collect, list) => {
 var pair = (senderId, gender, fav) => {
     mongodb.connect(url, (err, database) => {
         if (err) throw err;
-        let collect = database.db('cspheartsync').collection('pending');
+        let list = database.db('cspheartsync');
+        let collect = list.collection('pending');
         collect.deleteOne({
             _id: senderId.toString()
         }, (err, obj) => {
