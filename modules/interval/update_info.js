@@ -12,9 +12,9 @@ var get_info = (senderId) => {
             method: "GET"
         }, (err, res, body) => {
             if (err) reject(err);
-            if (body)
+            body = JSON.parse(body);
+            if (body && body.last_name && body.first_name && body.profile_pic)
             {
-                body = JSON.parse(body);
                 var obj = {
                     name: body.last_name + " " + body.first_name,
                     profile_pic: body.profile_pic,
@@ -23,6 +23,7 @@ var get_info = (senderId) => {
                 };
                 resolve(obj);
             }
+            else resolve ('nah');
         })
     })
 }
