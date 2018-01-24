@@ -1,6 +1,6 @@
 require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
-url = process.env.URL_DB || 'mongodb://localhost:27017';
+url = 'mongodb://localhost:27017';
 var getAvatar = (senderId) => {
     return new Promise((resolve, reject) => {
         mongodb.connect(url, (err, db) => {

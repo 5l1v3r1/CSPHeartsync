@@ -1,6 +1,6 @@
 require('dotenv').config()
 var mongodb = require('mongodb').MongoClient,
-url = process.env.URL_DB || 'mongodb://localhost:27017',
+    url = 'mongodb://localhost:27017',
     sendMessage = require('../../api/facebookAPI/sendMessage'),
     pairr = require('../resUser/pairr'),
     pair_log = require('../history');
@@ -21,18 +21,20 @@ var user_pair = (senderId, partnerId, collect, list) => {
 
                         // console.log("User 1 : " + senderId.toString() + " ; User 2 : " + partnerId.toString() + "\n");
                         var objinsert = [{
-                            id1: senderId.toString(),
-                            id2: partnerId.toString()
-                        },
-                        {
-                            id1: partnerId.toString(),
-                            id2: senderId.toString()
-                        }
+                                id1: senderId.toString(),
+                                id2: partnerId.toString()
+                            },
+                            {
+                                id1: partnerId.toString(),
+                                id2: senderId.toString()
+                            }
                         ]
                         paired.insertMany(objinsert, (err, res) => {
                             if (err) throw (err);
-                            sendMessage.sendBotMessageWithPromise(senderId,"Đã có một người được kết nối với bạn","Chúc hai bạn nói chuyện vui vẻ nha").then(a=>{
-                                sendMessage.sendBotMessageWithPromise(partnerId, "Đã có một người được kết nối với bạn", "Chúc hai bạn nói chuyện vui vẻ nha").then(b=>{pair_log.pair_log(senderId,partnerId)})
+                            sendMessage.sendBotMessageWithPromise(senderId, "Đã có một người được kết nối với bạn", "Chúc hai bạn nói chuyện vui vẻ nha").then(a => {
+                                sendMessage.sendBotMessageWithPromise(partnerId, "Đã có một người được kết nối với bạn", "Chúc hai bạn nói chuyện vui vẻ nha").then(b => {
+                                    pair_log.pair_log(senderId, partnerId)
+                                })
 
                             })
                         })
@@ -43,8 +45,8 @@ var user_pair = (senderId, partnerId, collect, list) => {
 }
 var pair = (senderId, gender, fav) => {
     mongodb.connect(url, (err, database) => {
-        let list = database.db('cspheartsync');
-        let collect = list.collection('pending');
+        if (err) throw err;
+        let collect = database.db('cspheartsync').collection('pending');
         collect.deleteOne({
             _id: senderId.toString()
         }, (err, obj) => {
@@ -68,9 +70,8 @@ var pair = (senderId, gender, fav) => {
                                             collect.insert({
                                                 _id: senderId.toString(),
                                                 favorite: fav,
-                                                gender: gender
-                                            }, (err, result) => {
-                                                return 'unmatched'
+                                                gender: gender,
+                                                timestamp: new Date ().getTime ().toString()
                                             });
                                         } else // (male; male) - (male; none) match found
                                         {
@@ -79,14 +80,15 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
-                                                    user_pair(senderId, partnerId, collect, list);
-                                                    return 'matched'
+                                                    if (result.length !== 0 && result != null) {
+                                                        let partnerId = result[0]._id;
+                                                        user_pair(senderId, partnerId, collect, list);
+                                                    }
                                                 }
-                                                );
+                                            );
                                         }
                                     }
-                                    )
+                                )
                             } else // (male; male) - (male; male) match found
                             {
                                 collect.find({
@@ -94,13 +96,15 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'male'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
-                                        user_pair(senderId, partnerId, collect, list);
+                                        if (result.length !== 0 && result != null) {
+                                            let partnerId = result[0]._id;
+                                            user_pair(senderId, partnerId, collect, list);
+                                        }
                                     }
-                                    );
+                                );
                             }
                         }
-                        );
+                    );
                 } else if (fav === 'female') {
                     collect.count({
                         gender: 'female',
@@ -119,7 +123,8 @@ var pair = (senderId, gender, fav) => {
                                             collect.insert({
                                                 _id: senderId.toString(),
                                                 favorite: fav,
-                                                gender: gender
+                                                gender: gender,
+                                                timestamp: new Date ().getTime ().toString()
                                             });
                                         } else // (male; female) - (female; none) match found
                                         {
@@ -128,13 +133,15 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
-                                                    user_pair(senderId, partnerId, collect, list);
+                                                    if (result.length !== 0 && result != null) {
+                                                        let partnerId = result[0]._id;
+                                                        user_pair(senderId, partnerId, collect, list);
+                                                    }
                                                 }
-                                                );
+                                            );
                                         }
                                     }
-                                    )
+                                )
                             } else // (male; female) - (female; male) match found
                             {
                                 collect.find({
@@ -142,13 +149,15 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'male'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
-                                        user_pair(senderId, partnerId, collect, list);
+                                        if (result.length !== 0 && result != null) {
+                                            let partnerId = result[0]._id;
+                                            user_pair(senderId, partnerId, collect, list);
+                                        }
                                     }
-                                    );
+                                );
                             }
                         }
-                        );
+                    );
                 } else if (fav === 'none') {
                     collect.count({
                         favorite: 'male'
@@ -165,7 +174,8 @@ var pair = (senderId, gender, fav) => {
                                             collect.insert({
                                                 _id: senderId.toString(),
                                                 favorite: fav,
-                                                gender: gender
+                                                gender: gender,
+                                                timestamp: new Date ().getTime ().toString()
                                             });
                                         } else // (male; none) - (x; none) match found
                                         {
@@ -173,26 +183,30 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
-                                                    user_pair(senderId, partnerId, collect, list);
+                                                    if (result.length !== 0 && result != null) {
+                                                        let partnerId = result[0]._id;
+                                                        user_pair(senderId, partnerId, collect, list);
+                                                    }
                                                 }
-                                                );
+                                            );
                                         }
                                     }
-                                    )
+                                )
                             } else // (male; none) - (x; male) match found
                             {
                                 collect.find({
                                     favorite: 'male'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
-                                        user_pair(senderId, partnerId, collect, list);
+                                        if (result.length !== 0 && result != null) {
+                                            let partnerId = result[0]._id;
+                                            user_pair(senderId, partnerId, collect, list);
+                                        }
                                     }
-                                    );
+                                );
                             }
                         }
-                        );
+                    );
                 }
             }
 
@@ -215,7 +229,8 @@ var pair = (senderId, gender, fav) => {
                                             collect.insert({
                                                 _id: senderId.toString(),
                                                 favorite: fav,
-                                                gender: gender
+                                                gender: gender,
+                                                timestamp: new Date ().getTime ().toString()
                                             });
                                         } else // (female; male) - (male; none) match found
                                         {
@@ -224,13 +239,15 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
-                                                    user_pair(senderId, partnerId, collect, list);
+                                                    if (result.length !== 0 && result != null) {
+                                                        let partnerId = result[0]._id;
+                                                        user_pair(senderId, partnerId, collect, list);
+                                                    }
                                                 }
-                                                );
+                                            );
                                         }
                                     }
-                                    )
+                                )
                             } else // (female; male) - (male; female) match found
                             {
                                 collect.find({
@@ -238,13 +255,15 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'male'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
-                                        user_pair(senderId, partnerId, collect, list);
+                                        if (result.length !== 0 && result != null) {
+                                            let partnerId = result[0]._id;
+                                            user_pair(senderId, partnerId, collect, list);
+                                        }
                                     }
-                                    );
+                                );
                             }
                         }
-                        );
+                    );
                 } else if (fav === 'female') {
                     collect.count({
                         gender: 'female',
@@ -263,7 +282,8 @@ var pair = (senderId, gender, fav) => {
                                             collect.insert({
                                                 _id: senderId.toString(),
                                                 favorite: fav,
-                                                gender: gender
+                                                gender: gender,
+                                                timestamp: new Date ().getTime ().toString()
                                             });
                                         } else // (male; female) - (female; none) match found
                                         {
@@ -272,13 +292,15 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
-                                                    user_pair(senderId, partnerId, collect, list);
+                                                    if (result.length !== 0 && result != null) {
+                                                        let partnerId = result[0]._id;
+                                                        user_pair(senderId, partnerId, collect, list);
+                                                    }
                                                 }
-                                                );
+                                            );
                                         }
                                     }
-                                    )
+                                )
                             } else // (female; female) - (female; female) match found
                             {
                                 collect.find({
@@ -286,13 +308,15 @@ var pair = (senderId, gender, fav) => {
                                     favorite: 'female'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
-                                        user_pair(senderId, partnerId, collect, list);
+                                        if (result.length !== 0 && result != null) {
+                                            let partnerId = result[0]._id;
+                                            user_pair(senderId, partnerId, collect, list);
+                                        }
                                     }
-                                    );
+                                );
                             }
                         }
-                        );
+                    );
                 } else if (fav === 'none') {
                     collect.count({
                         favorite: 'female'
@@ -309,7 +333,8 @@ var pair = (senderId, gender, fav) => {
                                             collect.insert({
                                                 _id: senderId.toString(),
                                                 favorite: fav,
-                                                gender: gender
+                                                gender: gender,
+                                                timestamp: new Date ().getTime ().toString()
                                             });
                                         } else // (female; none) - (x; none) match found
                                         {
@@ -317,26 +342,30 @@ var pair = (senderId, gender, fav) => {
                                                 favorite: 'none'
                                             }).limit(1).toArray(
                                                 (err, result) => {
-                                                    let partnerId = result[0]._id;
-                                                    user_pair(senderId, partnerId, collect, list);
+                                                    if (result.length !== 0 && result != null) {
+                                                        let partnerId = result[0]._id;
+                                                        user_pair(senderId, partnerId, collect, list);
+                                                    }
                                                 }
-                                                );
+                                            );
                                         }
                                     }
-                                    )
+                                )
                             } else // (female; none) - (x; female) match found
                             {
                                 collect.find({
                                     favorite: 'female'
                                 }).limit(1).toArray(
                                     (err, result) => {
-                                        let partnerId = result[0]._id;
-                                        user_pair(senderId, partnerId, collect, list);
+                                        if (result.length !== 0 && result != null) {
+                                            let partnerId = result[0]._id;
+                                            user_pair(senderId, partnerId, collect, list);
+                                        }
                                     }
-                                    );
+                                );
                             }
                         }
-                        );
+                    );
                 }
             }
         });
