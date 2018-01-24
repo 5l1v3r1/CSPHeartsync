@@ -27,6 +27,7 @@ var get_help = (senderId) => {
         }
         class asyncBot {
             reply(senderId, textInput) {
+                console.log (senderId);
                 user_existence.check(senderId).then(in_db => {
                     if (in_db === false) {
                         postInfoUser.postInfoUser(senderId);
