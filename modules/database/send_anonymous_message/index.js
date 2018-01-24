@@ -5,7 +5,7 @@ var checkinconvers = require('../checkUser/checkinconversUser'),
     url = 'mongodb://127.0.0.1:27017',
     sendMessage = require('../../api/facebookAPI/sendMessage');
 var find_fb_ava_id = (fburl) => {
-        if (/profile.php/.test(fburl)) {
+        if (/profile.php/.test(fburl) {
                 if (fburl.split('=').length == 2) {
                     fburl = fburl.split('=')[1];
                 } else {
