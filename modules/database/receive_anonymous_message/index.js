@@ -6,9 +6,16 @@ var start_receiving_message = (ID) => {
     return new Promise((resolve, reject) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
-            db.db('cspheartsync').collection('users').updateOne ({
+            db.db('cspheartsync').collection('users').updateOne({
                 _id: ID
-            }, {$set : {accept_mess: true}})
+            }, {
+                $set: {
+                    accept_mess: true
+                }
+            }, (err, res) => {
+                if (err) throw err;
+                db.close ();
+            })
         })
     })
 }
@@ -19,7 +26,14 @@ var stop_receiving_message = (ID) => {
             if (err) throw err;
             db.db('cspheartsync').collection('users').updateOne({
                 _id: ID
-            }, { $set: { accept_mess: false } })
+            }, {
+                $set: {
+                    accept_mess: false
+                }
+            }, (err, res) => {
+                if (err) throw err;
+                db.close();
+            })
         })
     })
 }

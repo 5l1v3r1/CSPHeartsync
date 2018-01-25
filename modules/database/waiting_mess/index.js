@@ -11,6 +11,9 @@ var add_awaiting_input = (senderId, fburl) => {
                 type: 'mess',
                 fburl: fburl,
                 mess: ''
+            }, (err, res) => {
+                if (err) throw err;
+                db.close ();
             })
         })
     })
@@ -20,17 +23,18 @@ var remove_awaiting_input = (senderId) => {
     return new Promise((resolve, reject) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
-            db.db('cspheartsync').collection('input_pending').deleteMany(
-                {
-                    id: senderId,
-                    type: 'mess'
-                }
-            )
+            db.db('cspheartsync').collection('input_pending').deleteMany({
+                id: senderId,
+                type: 'mess'
+            }, (err, res) => {
+                if (err) throw err;
+                db.close();
+            })
         })
     })
 }
 
 module.exports = {
-    add : add_awaiting_input,
-    remove : remove_awaiting_input
+    add: add_awaiting_input,
+    remove: remove_awaiting_input
 }

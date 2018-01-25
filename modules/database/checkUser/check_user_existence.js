@@ -10,6 +10,7 @@ var check_in_db = (senderId) => {
             {
                 if (cnt === 0) resolve (false);
                 else resolve (true)
+                db.close ();
             })
         })
     })

@@ -24,8 +24,29 @@ var get_info = (senderId) => {
     })
 }
 
-function execute() {
-    console.log ('updating ' + (new Date ().getTime ()).toString());
+function update(infos, collection) {
+    return Promise((resolve, reject) => {
+        infos.forEach((item) => {
+            var info = item.info;
+            collection.updateOne({
+                _id: item.id,
+            }, {
+                $set: {
+                    name: info,
+                    profile_pic: info.profile_pic,
+                    gender: info.gender,
+                    pic_id: info.pic_id
+                }
+            }, (err, res) => {
+                if (err) reject (err)
+            })
+            resolve('ok');
+        })
+    })
+}
+
+async function execute() {
+    console.log('updating ' + (new Date().getTime()).toString());
     mongodb.connect(url, (err, db) => {
         if (err) throw err;
         var collection = db.db('cspheartsync').collection('users');
@@ -41,19 +62,8 @@ function execute() {
                 })
             }
         })
-        infos.forEach((item) => {
-            var info = item.info;
-            collection.updateOne({
-                _id: item.id,
-            }, {
-                $set: {
-                    name: info,
-                    profile_pic: info.profile_pic,
-                    gender: info.gender,
-                    pic_id: info.pic_id
-                }
-            })
-        })
+        let x = await update (infos, collection);
+        db.close ();
     })
 }
 

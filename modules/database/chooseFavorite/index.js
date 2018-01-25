@@ -20,6 +20,7 @@ var chooseFavorite = (senderId, gender) => {
                         {
                             sendMessage.sendBotMessage (senderId, "Thông báo", "Để cho thay đổi có hiệu lực, hãy nhắn end để ra khỏi hàng đợi và nhắn tin bất kỳ để trở lại hàng đợi")
                         }
+                        db.close ();
                     }
                 )
             })

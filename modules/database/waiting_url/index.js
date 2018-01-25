@@ -7,10 +7,13 @@ var add_awaiting_input = (senderId) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
             db.db('cspheartsync').collection('input_pending').insertOne({
-                id : senderId,
-                type : 'url',
-                fburl : '',
+                id: senderId,
+                type: 'url',
+                fburl: '',
                 mess: ''
+            }, (err, db) => {
+                if (err) throw (err);
+                db.close ();
             })
         })
     })
@@ -20,12 +23,10 @@ var remove_awaiting_input = (senderId) => {
     return new Promise((resolve, reject) => {
         mongodb.connect(url, (err, db) => {
             if (err) throw err;
-            db.db('cspheartsync').collection('input_pending').deleteMany(
-                {
-                    id: senderId,
-                    type: 'url'
-                }
-            )
+            db.db('cspheartsync').collection('input_pending').deleteMany({
+                id: senderId,
+                type: 'url'
+            })
         })
     })
 }

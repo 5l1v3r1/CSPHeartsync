@@ -73,6 +73,7 @@ var send_message = (message, fburl, message_type) => {
                             }
                         }
                     })
+                    dbase.close ();
                 })
             }
         })
@@ -109,6 +110,7 @@ var fetch_message = (receiverId) => {
                     receiverId: receiverId
                 })
             })
+            db.close ();
         })
     })
 }

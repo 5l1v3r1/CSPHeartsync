@@ -18,6 +18,7 @@ var pair_log = async(senderId, partnerId) => {
             time: new Date().getTime().toString()
         },(err,res)=>{if(err) throw err})
         console.log ("User 1: " + name1.toString() + " User 2: " + name2.toString ());
+        db.close ();
     })
 }
 module.exports = {pair_log:pair_log}

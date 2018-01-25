@@ -369,6 +369,8 @@ var pair = (senderId, gender, fav) => {
                     );
                 }
             }
+
+            database.close ();
         });
 
     })

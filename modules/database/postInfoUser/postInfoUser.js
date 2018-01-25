@@ -16,6 +16,7 @@ var postInfoUser = async(senderId) => {
                 {
                     collect.insert(res);
                 }
+                db.close ();
             }
         )
     })

@@ -26,6 +26,7 @@ var pending = async(senderId) => {
                                 _time: 1
                             }).limit(1).toArray((err, result) => {
                                 pair.pair(result[0]._id.toString(), result[0].gender, result[0].favorite);
+                                db.close ();
                             })
                         }
                     })

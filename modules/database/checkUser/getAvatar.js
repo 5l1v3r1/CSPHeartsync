@@ -7,6 +7,7 @@ var getAvatar = (senderId) => {
             if (err) throw err;
             db.db('cspheartsync').collection('users').find({ _id: senderId.toString() }).toArray((err, res) => {
                 resolve(res[0].profile_pic);
+                db.close ();
             })
         })
     })

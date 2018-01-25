@@ -69,6 +69,7 @@ var endChat = (senderId) => {
                 })
             }
         })
+        db.close ();
     })
 
 }

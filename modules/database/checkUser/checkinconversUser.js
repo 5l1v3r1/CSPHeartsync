@@ -11,6 +11,7 @@ var checkincovers = (senderId) => {
                 if(result==null || result==''){return resolve(null)}
                 let incovers = result[0].inconversation;
                 resolve(incovers);
+                db.close ();
             });
         })
     })

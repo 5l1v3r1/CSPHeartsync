@@ -28,6 +28,7 @@ var check_waiting_input = (senderId, input_type) => {
                     if (typeof res == 'undefined' || res == null || res.length == 0) resolve(false);
                     else resolve(true);
                 }
+                db.close ();
             });
         })
     })
