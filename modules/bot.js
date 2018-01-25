@@ -37,13 +37,13 @@ class asyncBot {
                 if (textInput.toLowerCase() === 'hellofromtheotherside') {
                     getPartner.getPartner(senderId).then(partnerId => {
                         getName.getName(partnerId).then(name => {
-                            getAvatar.getAvatar(partnerId).then(ava => {
+                            getAvatar.getAvatar(partnerId``).then(ava => {
                                 sendMessage.sendBotMessage(senderId, name, ava);
                             })
                         })
                     })
                 }
-                if (textInput.toLowerCase() === 'help') {
+                else if (textInput.toLowerCase() === 'help') {
                     checkincovers.checkincovers(senderId).then(inconvers => {
                         if (inconvers === 2) {
                             getPartner.getPartner(senderId).then(partnerId => {
