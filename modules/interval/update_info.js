@@ -62,7 +62,7 @@ async function execute() {
                 })
             }
         })
-        let x = await update (infos, collection);
+        let x = await (update (infos, collection));
         db.close ();
     })
 }
