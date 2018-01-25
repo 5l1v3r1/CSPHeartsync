@@ -20,7 +20,7 @@ function execute() {
 }
 
 function run () {
-    setInterval (execute, 30000);
+    setInterval (execute, 300000);
 }
 
 module.exports = {
