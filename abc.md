@@ -1,2 +1,1 @@
-[ ]
-[ x ]
+- [x] Xử lí start user's session
